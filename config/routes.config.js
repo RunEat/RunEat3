@@ -11,6 +11,6 @@ router.post('/user/signup', usersController.signup);
 router.put('/user/edit', authMiddleware.isAuthenticated, usersController.edit);
 //router.post('/auth/logout', authMiddleware.isAuthenticated, usersController.logout); // Handled from the frontEnd
 router.get('/user/profile', authMiddleware.isAuthenticated, usersController.profile);
-router.post('/user/delete', usersController.delete)
+router.post('/user/delete', authMiddleware.isAuthenticated, usersController.delete)
 
 module.exports = router;

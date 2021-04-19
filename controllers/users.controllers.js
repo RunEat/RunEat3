@@ -99,7 +99,7 @@ module.exports.profile = (req, res, next) => {
 module.exports.delete = (req, res, next) => {
     User.findByIdAndDelete(req.currentUser)
         .then(() => {
-            res.redirect('/')
+            res.redirect('/user/signup')
         })
         .catch((err) => next(err))
 }

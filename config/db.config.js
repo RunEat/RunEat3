@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/lab-profile-app'
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/RunEat'
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })

@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 
 const diarySchema = mongoose.Schema({
-    name: {
-        
-    }
+    name: String
 })
 
 
-const Diary = mongoose.model('Diary', userSchema);
+const Diary = mongoose.model('Diary', diarySchema);
 
 module.exports = Diary;

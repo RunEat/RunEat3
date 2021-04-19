@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const Diary= require ('../models/Diary.model.js')
+const Diary= require('../models/Diary.model')
 
 const EMAIL_PATTERN = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const SALT_WORK_FACTOR = 10;
@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema({
     },
     username: {
       type: String,
-      required: 'Name is required'
+      required: 'Username is required'
     },
     name: {
       type: String,
@@ -30,16 +30,19 @@ const userSchema = mongoose.Schema({
     },
     age: {
         type: Number,
+        required: 'Age is required',
         min: 16,
         max: 120
     },
     weight: {
         type: Number,
+        required: 'Weight is required',
         min: 40,
         max: 300
     },
     height: {
         type: Number,
+        required: 'Height is required',
         min: 130,
         max: 230
     },
@@ -62,7 +65,7 @@ const userSchema = mongoose.Schema({
 {
     timestamps: true,
     toJSON: {
-        virtuals: true,
+    virtuals: true,
 		transform: (doc, ret) => {
 			ret.id = doc._id
 			delete ret._id
@@ -92,7 +95,7 @@ userSchema.methods.checkPassword = function (passwordToCheck) {
 };
 
 //Virtual Diary
-userSchema.virtuals('Diary', {
+userSchema.virtual('Diary', {
     ref: Diary.modelName,
     localField: '_id',
     foreignField: 'user'

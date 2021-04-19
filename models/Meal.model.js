@@ -38,9 +38,14 @@ const mealSchema = mongoose.Schema({
   }
 })
 
-
 mealSchema.virtual('Diary', {
   ref: Diary.modelName,
+  localField: '_id',
+  foreignField: 'meal'
+})
+
+mealSchema.virtual('Recipe', {
+  ref: Recipe.modelName,
   localField: '_id',
   foreignField: 'meal'
 })

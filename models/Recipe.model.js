@@ -57,6 +57,10 @@ const recipeSchema = mongoose.Schema({
 		//   message: () => 'Invalid image URL'
     type: String,
 	},
+  meal: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'meal'
+  }
 },
 {
   timestamps: true,

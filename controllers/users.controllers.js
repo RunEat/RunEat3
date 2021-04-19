@@ -97,5 +97,9 @@ module.exports.profile = (req, res, next) => {
 }
 
 module.exports.delete = (req, res, next) => {
-	
+    User.findByIdAndDelete(req.currentUser)
+        .then(() => {
+            res.redirect('/')
+        })
+        .catch((err) => next(err))
 }

@@ -63,17 +63,17 @@ const userSchema = mongoose.Schema({
 	},
 },
 {
-    timestamps: true,
-    toJSON: {
-    virtuals: true,
-		transform: (doc, ret) => {
-			ret.id = doc._id
-			delete ret._id
-			delete ret._v
-			delete ret.password
-			return ret
-		}
+  timestamps: true,
+  toJSON: {
+  virtuals: true,
+	transform: (doc, ret) => {
+		ret.id = doc._id
+		delete ret._id
+		delete ret._v
+		delete ret.password
+		return ret
 	}
+}
 }
 )
 

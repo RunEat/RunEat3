@@ -1,7 +1,23 @@
 const mongoose = require('mongoose');
 
 const diarySchema = mongoose.Schema({
-    name: String
+    sport: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'sport'
+    },
+    meal: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'meal'
+    },
+    user: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'user',
+        required: true
+    },
+    date: {
+        type: Date,
+        required: true
+    }
 })
 
 

@@ -55,6 +55,18 @@ const recipeSchema = mongoose.Schema({
 		  },
 		  message: () => 'Invalid image URL'
 	},
+},
+{
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    transform: (doc, ret) => {
+      ret.id = doc._id
+      delete ret._id
+      delete ret._v
+      return ret
+    }
+  }
 })
 
 recipeSchema.virtual('Meal', {

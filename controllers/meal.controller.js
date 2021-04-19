@@ -12,7 +12,7 @@ module.exports.getMeal = (req, res, next) => {
     Diary.findOne({ date: req.query.date })
         .populate('meal')
         .then((diary) => {
-            Meal.find({ diary: diary._id })
+            Meal.find(diary.meal)
                 .populate('recipe')
                 .then(meal => {
                     res.json(meal)

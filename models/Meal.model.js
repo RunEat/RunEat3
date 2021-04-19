@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const Diary= require('../models/Diary.model');
+const Diary = require('./Diary.model');
+const Recipe = require ('./Recipe.model')
 
 const mealSchema = mongoose.Schema({
   mealType: {
@@ -19,11 +20,7 @@ const mealSchema = mongoose.Schema({
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'recipe'
     }
-  },
-  diary: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'diary'
-    }
+  }
 },
 {
   timestamps: true,

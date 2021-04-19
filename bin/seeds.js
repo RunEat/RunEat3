@@ -9,6 +9,9 @@ const Sport = require('../models/Sport.model')
 
 require('../config/db.config')
 
+let sportsCreated = []
+let mealsCreated = []
+
 mongoose.connection.once('open', () => {
   console.info(`*** Connected to the database ${mongoose.connection.db.databaseName} ***`);
 
@@ -33,6 +36,9 @@ mongoose.connection.once('open', () => {
     })
       .then((sports) => {
         console.log(`${sports.length} sports created`)
+
+        sportsCreated = sports;
+
         const recipes = []
 
         for (let index = 0; index < 4; index++) {
@@ -50,7 +56,7 @@ mongoose.connection.once('open', () => {
         })
         }
         
-        return Recipe.create(recipes)
+        return Recipe.create(recipes) 
     })
       .then((recipes) => {
         //console.log(recipes)
@@ -73,6 +79,9 @@ mongoose.connection.once('open', () => {
       })
       .then((meals) => {
         console.log(`${meals.length} recipes created`)
+
+        mealsCreated = meals
+
         const users = []
 
       for (let index = 0; index < 5; index++) {
@@ -90,14 +99,17 @@ mongoose.connection.once('open', () => {
       return User.create(users)
     })
     .then((users) => {  //Necesitamos aquí sports y meals
+      
       console.log(`${users.length} users created`)
 
       const diaries = []
 
+      console.log('sportsCreated', sportsCreated);
+
       for (let index = 0; index < 20; index++) {
         diaries.push({
-            sport: sports._id,
-            meal: meals._id,
+            sport: sportsCreated[index]._id,
+            meal: mealsCreated[index]._id,
             user: users.id,
             date: new Date,   
         })

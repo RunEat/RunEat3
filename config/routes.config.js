@@ -1,22 +1,18 @@
 const express = require('express');
 const router = express.Router();
-//const miscController = require('../controllers/misc.controllers');
-const userController = require('../controllers/users.controller');
+const userController = require('../controllers/user.controller');
 const diaryController = require('../controllers/diary.controller');
 const mealController = require('../controllers/meal.controller');
 const sportController = require('../controllers/sport.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 
-// Misc Route
-// router.get('/', miscController.home)
-
 // USER ROUTES
-router.post('/user/login', usersController.login);
-router.post('/user/signup', usersController.signup);
+router.post('/user/login', userController.login);
+router.post('/user/signup', userController.signup);
 // router.post('/auth/upload', authMiddleware.isAuthenticated, usersController.upload);
-router.put('/user/edit', authMiddleware.isAuthenticated, usersController.edit);
-router.get('/user/profile', authMiddleware.isAuthenticated, usersController.profile);
-router.post('/user/delete', authMiddleware.isAuthenticated, usersController.delete);
+router.put('/user/edit', authMiddleware.isAuthenticated, userController.edit);
+router.get('/user/profile', authMiddleware.isAuthenticated, userController.profile);
+router.post('/user/delete', authMiddleware.isAuthenticated, userController.delete);
 
 // DIARY ROUTES
 router.get('/diary', authMiddleware.isAuthenticated, diaryController.getDiary) // List

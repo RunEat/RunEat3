@@ -1,31 +1,49 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Diary= require ('../models/Diary.model.js')
 
+const EMAIL_PATTERN = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const SALT_WORK_FACTOR = 10;
 
+
 const userSchema = mongoose.Schema({
-	username: {
-		unique: true,
-		type: String,
-		required: 'Username is required',
-		minLenght: [4, 'Username is not valid. It must be at least 4 characthers long.']
-	  },
-	password: {
-		type: String,
-		required: 'Password is required',
-		minLength: [8, 'Password must have 8 characters or more']
-	  },
-	campus: {
-		type: [String],
-		required: 'Campus is required',
-		enum: ['Madrid', 'Barcelona', 'Miami', 'Paris', 'Berlin', 'Amsterdam', 'México', 'Sao Paulo', 'Lisbon']
-	  },
-	course: {
-		type: [String],
-		required: 'Course is required',
-		enum: ['Web Dev', 'UX/UI', 'Data Analytics', 'Cibersecurity']
-	  },
-	image: {
+	email: {
+      unique: true,
+      type: String,
+      required: 'Email is required',
+      match: [EMAIL_PATTERN, 'Email is not valid']
+    },
+    password: {
+      type: String,
+      required: 'Password is required',
+      minLength: [8, 'Password must have 8 characters or more']
+    },
+    username: {
+      type: String,
+      required: 'Name is required'
+    },
+    name: {
+      type: String,
+    },
+    surname: {
+      type: String,
+    },
+    age: {
+        type: Number,
+        min: 16,
+        max: 120
+    },
+    weight: {
+        type: Number,
+        min: 40,
+        max: 300
+    },
+    height: {
+        type: Number,
+        min: 130,
+        max: 230
+    },
+	avatar: {
 		type: String,
 		validate: { // Mongoose method to validate images
 		  validator: value => { // A value is passed
@@ -42,8 +60,9 @@ const userSchema = mongoose.Schema({
 	  },
 },
 {
-	timestamps: true,
-	toJSON: {
+    timestamps: true,
+    toJSON: {
+        virtuals: true,
 		transform: (doc, ret) => {
 			ret.id = doc._id
 			delete ret._id
@@ -71,6 +90,13 @@ userSchema.pre('save', function(next){
 userSchema.methods.checkPassword = function (passwordToCheck) {
 	return bcrypt.compare(passwordToCheck, this.password);
 };
+
+//Virtual Diary
+userSchema.virtuals('Diary', {
+    ref: Diary.modelName,
+    localField: '_id',
+    foreignField: 'user'
+})
 
 const User = mongoose.model('User', userSchema);
 

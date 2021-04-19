@@ -20,6 +20,10 @@ const mealSchema = mongoose.Schema({
       ref: 'recipe'
     }
   },
+  diary: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'diary'
+    }
 },
 {
   timestamps: true,

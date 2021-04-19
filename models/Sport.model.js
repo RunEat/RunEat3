@@ -4,17 +4,21 @@ const Diary= require('./Diary.model');
 const sportSchema = mongoose.Schema({
   chronometer: {
     startTime: {
-      type: Date
+      type: Date,
+      required: true
     },
     endTime: {
-      type: Date
+      type: Date,
+      required: true
     }
   },
   caloriesBurned: {
-    type: Number
+    type: Number,
+    required: true
   },
   distance: {
-    type: Number
+    type: Number,
+    required: true
   },
   pace: {
     type: Number
@@ -51,6 +55,6 @@ sportSchema.virtual('Diary', {
   foreignField: 'sport'
 })
 
-const Sport = mongoose.model('Sport');
+const Sport = mongoose.model('Sport', sportSchema);
 
 module.exports = Sport;

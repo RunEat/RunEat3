@@ -39,21 +39,23 @@ const recipeSchema = mongoose.Schema({
   },
   ingredients: {
     type: [String],
+    required: true
   },
   dietLabel: {
     type: [String],
   },
   instructions: {
-    validator: value => {
-			try {
-			  const url = new URL(value)
+    // validator: value => {
+		// 	try {
+		// 	  const url = new URL(value)
   
-			  return url.protocol === 'http:' || url.protocol === 'https:' 
-			} catch(err) {
-			  return false
-			}
-		  },
-		  message: () => 'Invalid image URL'
+		// 	  return url.protocol === 'http:' || url.protocol === 'https:' 
+		// 	} catch(err) {
+		// 	  return false
+		// 	}
+		//   },
+		//   message: () => 'Invalid image URL'
+    type: String,
 	},
 },
 {

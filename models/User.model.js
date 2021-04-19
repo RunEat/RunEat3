@@ -60,7 +60,7 @@ const userSchema = mongoose.Schema({
 		  },
 		  message: () => 'Invalid image URL' // This message is returned
 		},
-	  },
+	},
 },
 {
     timestamps: true,

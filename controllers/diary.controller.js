@@ -29,7 +29,7 @@ module.exports.deleteDiary = (req, res, next) => {
     Diary.findOne({date: req.query.date})
         .then((diary) => {
             Sport.findByIdAndDelete(diary.sport) // If more than one sport --> deleteMany
-                .then((diary) => {
+                .then(() => {
                     console.log('Sport deleted')
                 })
 
@@ -45,6 +45,10 @@ module.exports.deleteDiary = (req, res, next) => {
                     })
                 })
             
+            Diary.findByIdAndDelete(diary.id)
+                .then(() => {
+                    res.status(200).json({})
+                })
         })
         .catch(next)
 }

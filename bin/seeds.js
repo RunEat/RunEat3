@@ -20,7 +20,7 @@ mongoose.connection.once('open', () => {
       .then(() => {
         const sports = []
 
-        for (let index = 0; index < 5; index++) {
+        for (let index = 0; index < 1; index++) {
         sports.push({
             chronometer: {
                 startTime: new Date,
@@ -64,7 +64,7 @@ mongoose.connection.once('open', () => {
 
       const meals = []
 
-      for (let index = 0; index < 20; index++) {
+      for (let index = 0; index < 1; index++) {
         meals.push({
             mealType: { 
                 breakfast: recipes[0]._id,
@@ -84,7 +84,7 @@ mongoose.connection.once('open', () => {
 
         const users = []
 
-      for (let index = 0; index < 5; index++) {
+      for (let index = 0; index < 1; index++) {
         users.push({
           email: faker.internet.email(),
           password: '12345678',
@@ -101,16 +101,15 @@ mongoose.connection.once('open', () => {
     .then((users) => {  //Necesitamos aquí sports y meals
       
       console.log(`${users.length} users created`)
+      console.log(users)
 
       const diaries = []
 
-      console.log('sportsCreated', sportsCreated);
-
-      for (let index = 0; index < 20; index++) {
+      for (let index = 0; index < 1; index++) {
         diaries.push({
-            sport: sportsCreated[index]._id,
-            meal: mealsCreated[index]._id,
-            user: users.id,
+            sport: sportsCreated._id,
+            meal: mealsCreated._id,
+            user: users[0].id,
             date: new Date,   
         })
       }

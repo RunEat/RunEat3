@@ -1,12 +1,11 @@
 const createError = require('http-errors');
-const Recipe = require('../models/Recipe.model');
 
 //const Recipe = import('../models/Recipe.model')
-const User = import('../models/User.model')
-const Diary = import('../models/Diary.model')
-const Sport = import('../models/Sport.model')
-const Meal = import('../models/Meal.model')
-const Recipe = import('../models/Recipe.model')
+const User = import('./User.model')
+const Diary = import('./Diary.model')
+const Sport = import('./Sport.model')
+const Meal = import('./Meal.model')
+const Recipe = import('./Recipe.model')
 
 module.exports.getDiary = (req, res, next) => {
     const user = req.currentUser

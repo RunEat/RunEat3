@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+require('./Meal.model')
+require('./User.model')
+require('./Sport.model')
+
 const diarySchema = mongoose.Schema({
     sport: {
         type: mongoose.SchemaTypes.ObjectId,

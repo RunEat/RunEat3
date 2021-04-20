@@ -11,6 +11,7 @@ require('../config/db.config')
 
 let sportsCreated = []
 let mealsCreated = []
+const createdRecipes = []
 
 mongoose.connection.once('open', () => {
   console.info(`*** Connected to the database ${mongoose.connection.db.databaseName} ***`);
@@ -39,10 +40,8 @@ mongoose.connection.once('open', () => {
 
         sportsCreated = sports;
 
-        const recipes = []
-
-        for (let index = 0; index < 4; index++) {
-        recipes.push({
+        for (let index = 0; index < 1; index++) {
+        createdRecipes.push({
             name: faker.name.title(),
             macros: {
                 carbs: Math.floor(Math.random() * 100),
@@ -52,25 +51,26 @@ mongoose.connection.once('open', () => {
             calories: Math.floor(Math.random() * 1000),
             image: faker.internet.url(),
             ingredients: faker.lorem.words(), //DUDO
-            instructions: 'http://www.google.es'
+            instructions: 'http://www.google.es',
+            meal: null
         })
         }
         
-        return Recipe.create(recipes) 
+        return Recipe.create(createdRecipes) 
     })
-      .then((recipes) => {
-        //console.log(recipes)
-        console.log(`${recipes.length} recipes created`)
-
+    .then((recipes) => {
+      //console.log(recipes)
+      console.log(`${recipes.length} recipes created`)
+      
       const meals = []
 
       for (let index = 0; index < 1; index++) {
         meals.push({
             mealType: { 
                 breakfast: recipes[0]._id,
-                lunch: recipes[1]._id,
-                dinner: recipes[2]._id,
-                snacks: recipes[3]._id
+                lunch: recipes[0]._id,
+                dinner: recipes[0]._id,
+                snacks: recipes[0]._id
             }   
         })
       }
@@ -79,6 +79,15 @@ mongoose.connection.once('open', () => {
       })
       .then((meals) => {
         console.log(`${meals.length} recipes created`)
+
+        console.log('meals.breakfast', meals[0].mealType.breakfast)
+        Recipe.findOneAndUpdate({
+              id: meals[0].mealType.breakfast
+            }, {
+              meal: meals[0]._id
+            }, {
+              new: true})
+        console.log('createdRecipes', createdRecipes)
 
         mealsCreated = meals
 
@@ -107,8 +116,8 @@ mongoose.connection.once('open', () => {
 
       for (let index = 0; index < 1; index++) {
         diaries.push({
-            sport: sportsCreated._id,
-            meal: mealsCreated._id,
+            sport: sportsCreated[0]._id,
+            meal: mealsCreated[0]._id,
             user: users[0].id,
             date: new Date,   
         })

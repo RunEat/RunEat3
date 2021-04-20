@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Diary= require('./Diary.model');
+const Diary = require('./Diary.model');
 
 const sportSchema = mongoose.Schema({
   chronometer: {

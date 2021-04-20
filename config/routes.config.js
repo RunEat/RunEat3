@@ -24,7 +24,7 @@ router.delete('/diary/:id', authMiddleware.isAuthenticated, diaryController.dele
 // List - No list
 router.post('/diary/sport', authMiddleware.isAuthenticated, sportController.addSport) // Create
 // Update - No update
-router.post('/diary/sport/delete/:id', authMiddleware.isAuthenticated, sportController.deleteSport) // Delete
+router.delete('/diary/sport/:id', authMiddleware.isAuthenticated, sportController.deleteSport) // Delete
 
 // MEAL ROUTES
 router.get('/diary/meal', authMiddleware.isAuthenticated, mealController.getMeal) // List

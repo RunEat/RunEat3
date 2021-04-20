@@ -126,7 +126,7 @@ mongoose.connection.once('open', () => {
             sport: sportsCreated[0]._id,
             meal: mealsCreated[0]._id,
             user: users[0].id,
-            date: new Date,   
+            date: new Date().toDateString(),   
         })
       }
 

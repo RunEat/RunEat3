@@ -31,62 +31,65 @@ module.exports.deleteDiary = (req, res, next) => {
     console.log('req.params.id', req.params.id)
         
     let diaryToDelete
+    let mealToDelete
 
     Diary.findById(req.params.id)
         .then((diary) => {
             diaryToDelete = diary
             console.log ('Entra en diary')
-            Sport.findById(diary.sport) // If more than one sport --> deleteMany
+            Sport.findByIdAndDelete(diaryToDelete.sport) // If more than one sport --> deleteMany
                 .then((sport) => {
                     console.log('sport', sport)
                     console.log('Sport deleted')
-                    res.status(200).json({})
+                    //res.status(200).json({})
                 })
                 .catch(next)
-
-            // Meal.findOne(diary.meal)
-            //     .then((meal) => {
-            //         Recipe.deleteMany({meal: meal._id})
-            //             .then((meal) => {
-            //                 console.log('Recipe deleted')
-            //                 Meal.findByIdAndDelete(meal._id)
-            //                     .then(() => {
-            //                     console.log('Meal deleted')
-            //                 })
-            //         })
-            //     })
-            //     .catch(next)
-            
-            // Diary.findByIdAndDelete(diary.id)
-            //     .then(() => {
-            //         console.log('Diary findByIdAndDelete')
-            //         res.status(200).json({})
-            //     })
-            //     .catch(next)
         })
         .then(() => {            
             Meal.findOne(diaryToDelete.meal)
                 .then((meal) => {
-                    Recipe.find({meal: meal._id})
-                        //.populate('recipe')
+                    mealToDelete = meal
+                    Recipe.findByIdAndDelete(meal.mealType.breakfast)
                         .then((recipe) => {
-                            console.log('recipe', recipe)
-                            console.log('Recipe deleted')
+                            console.log('breakfast', recipe)
                             //res.status(200).json({})
-                            // Meal.findById(meal._id)
-                            //     .then((meal) => {
-                            //     console.log('meal', meal)
-                            //     console.log('Meal deleted')
-                            //     res.status(200).json({})
-                            //     })
-                            //     .catch(next)
+                        })
+                        .catch(next)
+
+                    Recipe.findByIdAndDelete(meal.mealType.lunch)
+                        .then((recipe) => {
+                            console.log('Lunch', recipe)
+                            //res.status(200).json({})
+                        })
+                        .catch(next)
+
+                    Recipe.findByIdAndDelete(meal.mealType.dinner)
+                        .then((recipe) => {
+                            console.log('dinner', recipe)
+                            //res.status(200).json({})
+                        })
+                        .catch(next)
+                        
+                    Recipe.findByIdAndDelete(meal.mealType.snacks)
+                        .then((recipe) => {
+                            console.log('snacks', recipe)
+                            //res.status(200).json({})
+                        })
+                        .catch(next)
+                })
+                .then(() => {
+                    Meal.findByIdAndDelete(diaryToDelete.meal)
+                        .then((meal) => {
+                            console.log('meal', meal)
+                            console.log('Meal deleted')
+                            //res.status(200).json({})
                         })
                         .catch(next)
                 })
                 .catch(next)
         }) 
         .then(() => {
-            Diary.findById(diaryToDelete.id)
+            Diary.findByIdAndDelete(diaryToDelete.id)
             .then(() => {
                 console.log('Diary findByIdAndDelete')
                 res.status(200).json({})

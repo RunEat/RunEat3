@@ -40,7 +40,7 @@ mongoose.connection.once('open', () => {
 
         sportsCreated = sports;
 
-        for (let index = 0; index < 1; index++) {
+        for (let index = 0; index < 4; index++) {
         createdRecipes.push({
             name: faker.name.title(),
             macros: {
@@ -62,32 +62,39 @@ mongoose.connection.once('open', () => {
       //console.log(recipes)
       console.log(`${recipes.length} recipes created`)
       
-      const meals = []
+      //const meals = []
 
       for (let index = 0; index < 1; index++) {
-        meals.push({
+        mealsCreated.push({
             mealType: { 
                 breakfast: recipes[0]._id,
-                lunch: recipes[0]._id,
-                dinner: recipes[0]._id,
-                snacks: recipes[0]._id
+                lunch: recipes[1]._id,
+                dinner: recipes[2]._id,
+                snacks: recipes[3]._id
             }   
         })
       }
+      // console.log('mealsCreated[0].mealType.breakfastreakfast', mealsCreated[0].mealType.breakfast)
 
-      return Meal.create(meals)
+      // createdRecipes[0].meal = mealsCreated[0].mealType.breakfast
+      // console.log('recipes', createdRecipes)
+
+      return Meal.create(mealsCreated)
       })
       .then((meals) => {
         console.log(`${meals.length} recipes created`)
+        // console.log('mealsID', meals[0]._id)
+        // console.log('createdRecipes1', createdRecipes)
 
-        console.log('meals.breakfast', meals[0].mealType.breakfast)
-        Recipe.findOneAndUpdate({
-              id: meals[0].mealType.breakfast
-            }, {
-              meal: meals[0]._id
-            }, {
-              new: true})
-        console.log('createdRecipes', createdRecipes)
+        // let position = createdRecipes[0].meal
+        
+        // console.log('position', position)
+
+        // position = ObjectId(`${meals[0]._id}`)
+        // recipeID = meals[0].mealType.breakfast
+        
+        
+        // Recipe.find(recipeID, {meal: position})
 
         mealsCreated = meals
 

@@ -94,6 +94,7 @@ module.exports.profile = (req, res, next) => {
 				res.json(user)
 			}
 		})
+		.catch(next)
 }
 
 module.exports.delete = (req, res, next) => {
@@ -101,5 +102,5 @@ module.exports.delete = (req, res, next) => {
       .then(() => {
         res.status(204).json({})
       })
-      .catch((err) => next(err))
+      .catch(next)
 }

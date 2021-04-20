@@ -1,9 +1,9 @@
 const createError = require('http-errors');
 
-const User = import('../models/User.model')
-const Sport = import('../models/Sport.model')
-const Diary = import('../models/Diary.model')
-const Meal = import('../models/Meal.model')
+const User = require('../models/User.model')
+const Sport = require('../models/Sport.model')
+const Diary = require('../models/Diary.model')
+const Meal = require('../models/Meal.model')
 
 
 module.exports.getMeal = (req, res, next) => {
@@ -18,6 +18,7 @@ module.exports.getMeal = (req, res, next) => {
                     res.json(meal)
                 })
         })
+        .catch(next)
 }
 
 module.exports.addMeal = (req, res, next) => {

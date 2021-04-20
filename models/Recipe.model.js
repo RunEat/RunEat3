@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Meal= require('../models/Meal.model');
+const Meal= require('./Meal.model');
 
 const recipeSchema = mongoose.Schema({
   name: {

@@ -5,12 +5,28 @@ const diaryController = require('../controllers/diary.controller');
 const mealController = require('../controllers/meal.controller');
 const sportController = require('../controllers/sport.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
+const passport = require('passport')
+require('../config/passport.config')
+
+const upload = require('./storage.config')
+
 
 // USER ROUTES
 router.post('/user/login', userController.login);
+
+//GOOGLE AUTH
+router.get('/auth/google', passport.authenticate('google', {
+    session: false,
+    scope: ["profile", "email"],
+    accessType: "offline",
+    approvalPrompt: "force"
+}));
+router.get('/auth/google/callback', passport.authenticate('google', { session: false }), userController.loginGoogle)
+//router.get('/verify', authMiddleware.isAuthenticated)  //POSTMAN
+
 router.post('/user/signup', userController.signup);
 // router.post('/auth/upload', authMiddleware.isAuthenticated, usersController.upload);
-router.put('/user/edit', authMiddleware.isAuthenticated, userController.edit);
+router.put('/user/edit', upload.single('avatar'), authMiddleware.isAuthenticated, userController.edit);
 router.get('/user/profile', authMiddleware.isAuthenticated, userController.profile);
 router.post('/user/delete', authMiddleware.isAuthenticated, userController.delete);
 

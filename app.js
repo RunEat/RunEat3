@@ -6,6 +6,8 @@ const cors = require('cors'); // Avoids CORS errors and allows the API to be cal
 const createError = require('http-errors');
 const logger = require('morgan');
 const express = require('express');
+const passport = require('passport');
+
 
 require('./config/db.config')
 
@@ -13,12 +15,13 @@ const app = express();
 
 /* Middlewares */
 
+app.use(passport.initialize())
 app.use(express.json());
 app.use(logger('dev'));
 app.use(cors()); // Like this anyone can make requests to our API from a frontEnd web
 
 /* Routes */
-const routes = require('./config/routes.config')
+const routes = require('./config/routes.config');
 app.use('/api', routes)
 
 /* Handle Errors */

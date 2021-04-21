@@ -1,6 +1,9 @@
 const createError = require('http-errors');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
+const { sendActivationEmail } = require('../config/mailer.config');
+const { generatePasswordRecoveryTemplate } = require('../config/mailer.config');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports.login = (req, res, next) => {
 	const { username, password } = req.body
@@ -35,13 +38,28 @@ module.exports.signup = (req, res, next) => {
 	User.findOne({ username: req.body.username })
 		.then(user => {
 			if (user) {
-				next(createError(400, { errors: { username: 'This username is already in use' } }))
+				next(createError(400, { errors: { username: 'This username already exists.' } }))
 			} else {
 				return User.create(req.body)
-					.then(user => res.status(201).json(user))
+					.then(createdUser => {
+						sendActivationEmail(createdUser.email, createdUser.token)
+						res.status(201)
+					})
 			}
 		})
 		.catch(next)
+}
+
+module.exports.activate = (req, res, next) => {
+	User.findOneAndUpdate({ 
+			token: req.params.token, active: false 
+		}, {
+			active: true, token: uuidv4()
+		})
+		.then(activeUser => {
+			activeUser ? res.status(200).json(activeUser) : res.status(400).json({})
+		})
+		.catch(next);
 }
 
 module.exports.upload = (req, res, next) => {

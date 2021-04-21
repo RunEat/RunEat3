@@ -7,10 +7,18 @@ const sportController = require('../controllers/sport.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 
 // USER ROUTES
-router.post('/user/login', userController.login);
+// Signup
 router.post('/user/signup', userController.signup);
-// router.post('/auth/upload', authMiddleware.isAuthenticated, usersController.upload);
+router.get('/user/activate/:token', userController.activate);
+// Password Recovery
+// router.post('/user/password_reset'); // Post sending user Id
+// router.get('/user/password_reset/:token'); // Token associatd with the user id
+// router.post('/user/password_reset/:token'); // If token matches updates password
+// Login
+router.post('/user/login', userController.login);
+// Update user and delete account
 router.put('/user/edit', authMiddleware.isAuthenticated, userController.edit);
+// router.post('/auth/upload', authMiddleware.isAuthenticated, usersController.upload);
 router.get('/user/profile', authMiddleware.isAuthenticated, userController.profile);
 router.post('/user/delete', authMiddleware.isAuthenticated, userController.delete);
 

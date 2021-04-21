@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Meal = import('../models/Meal.model')
+const Meal = require('../models/Meal.model')
 
 const diarySchema = mongoose.Schema({
     sport: {

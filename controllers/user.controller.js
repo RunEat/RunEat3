@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
 const { sendActivationEmail } = require('../config/mailer.config');
-const { generatePasswordRecoveryTemplate } = require('../config/mailer.config');
+const { sendPasswordRecoveryEmail } = require('../config/mailer.config');
 const { v4: uuidv4 } = require('uuid');
 
 module.exports.login = (req, res, next) => {
@@ -44,7 +44,7 @@ module.exports.signup = (req, res, next) => {
 					.then(createdUser => {
 						console.log('createdUser (l45 user.controller): ', createdUser)
 						sendActivationEmail(createdUser.email, createdUser.token)
-						res.status(201)
+						res.status(201).send(`Activation Email Sent to ${createdUser.email}`) // TODO -> Modify 
 					})
 			}
 		})
@@ -83,11 +83,6 @@ module.exports.edit = (req, res, next) => {
 				next(createError(404));
 				return;
 			}
-			// A bit redundant since the route is protected
-			// if(user.toString() !== req.currentUser.toString()) {
-			// 	next(createError(403));
-			// 	return;
-			// }
 
 			Object.entries(req.body).forEach(([key, value]) => { // For each body element it creates a key value pair
 				user[key] = value;
@@ -109,7 +104,7 @@ module.exports.profile = (req, res, next) => {
 	User.findById(req.currentUser)
 		.then(user => {
 			if(!user) {
-				next(createERROR(404, 'User not found'))
+				next(createError(404, 'User not found'))
 			} else {
 				res.json(user)
 			}
@@ -117,9 +112,64 @@ module.exports.profile = (req, res, next) => {
 }
 
 module.exports.delete = (req, res, next) => {
-    User.findByIdAndDelete(req.currentUser)
-      .then(() => {
-        res.status(204).json({})
-      })
-      .catch((err) => next(err))
+  User.findByIdAndDelete(req.currentUser)
+    .then(() => {
+      res.status(204).json({})
+    })
+    .catch((err) => next(err))
+}
+
+module.exports.sendPasswordReset = (req, res, next) => {
+	console.log('req.body', req.body)
+	User.findOne({ email: req.body.email })
+		.then(user => {
+			if (!user) {
+				//next(createError(400, { errors: { email: 'Error.' } }))
+				res.status(200).send('If your email address is in our database you will get a recovery email.') // Email sent confirmation 
+			} else {
+				sendPasswordRecoveryEmail(user.email, user.token)
+				res.status(200).send('If your email address is in our database you will get a recovery email.') // TODO -> Modify 
+			}
+	})
+	.catch(next)
+}
+
+module.exports.updatePassword = (req, res, next) => {
+		User.findOne({ token: req.params.token, active: true })
+		.then(user => {
+			if (!user) {
+				next(createError(404, { errors: { username: 'username or password are not valid'} }))
+			} else {
+				res.json({
+					access_token: jwt.sign(
+						{ id: user._id },
+						process.env.JWT_SECRET || 'JWT Secret - It should be changed',
+						{
+						expiresIn: '90s'
+						}
+					)
+				})
+			}
+		})
+		.catch(next)
+}
+
+module.exports.doUpdatePassword = (req, res, next) => {
+	console.log('req.currentUser', req.currentUser)
+	User.findOneAndUpdate({_id: req.currentUser}, { token: uuidv4()})
+		.then(user => {
+			if(!user) {
+				next(createError(404));
+				return;
+			} else if (!req.currentUser) {
+
+			}
+
+			Object.entries(req.body).forEach(([key, value]) => { // For each body element it creates a key value pair
+				user[key] = value;
+			});
+
+			return user.save().then(() => res.json({}));
+		})
+		.catch(next);
 }

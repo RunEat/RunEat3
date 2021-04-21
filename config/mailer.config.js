@@ -14,7 +14,7 @@ module.exports.sendActivationEmail = (email, token) => {
     transporter.sendMail({
         from: `RunEat <${process.env.NM_USER}>`,
         to: email,
-        subject: '¡Gracias por unirte a RunEat!',
+        subject: 'Welcome to RunEat!',
         html: generateActivationTemplate(token)
     });
 }
@@ -23,7 +23,7 @@ module.exports.sendPasswordRecoveryEmail = (email, token) => {
     transporter.sendMail({
         from: `RunEat <${process.env.NM_USER}>`,
         to: email,
-        subject: 'Recupera tu contraseña',
+        subject: 'Password recovery',
         html: generatePasswordRecoveryTemplate(token)
     });
 }

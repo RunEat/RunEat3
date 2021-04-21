@@ -10,10 +10,6 @@ const authMiddleware = require('../middlewares/auth.middleware');
 // Signup
 router.post('/user/signup', userController.signup);
 router.get('/user/activate/:token', userController.activate);
-// Password Recovery
-// router.post('/user/password_reset'); // Post sending user Id
-// router.get('/user/password_reset/:token'); // Token associatd with the user id
-// router.post('/user/password_reset/:token'); // If token matches updates password
 // Login
 router.post('/user/login', userController.login);
 // Update user and delete account
@@ -21,6 +17,10 @@ router.put('/user/edit', authMiddleware.isAuthenticated, userController.edit);
 // router.post('/auth/upload', authMiddleware.isAuthenticated, usersController.upload);
 router.get('/user/profile', authMiddleware.isAuthenticated, userController.profile);
 router.post('/user/delete', authMiddleware.isAuthenticated, userController.delete);
+// Password Recovery
+router.post('/user/password_reset', userController.sendPasswordReset); // Post sending user Id
+router.get('/user/password_reset/:token', userController.updatePassword); // Token associatd with the user id
+router.put('/user/password_reset', userController.doUpdatePassword); // If token matches updates password
 
 // DIARY ROUTES
 router.get('/diary', authMiddleware.isAuthenticated, diaryController.getDiary) // List

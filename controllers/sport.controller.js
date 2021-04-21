@@ -10,40 +10,51 @@ module.exports.addSport = (req, res, next) => {
   Sport.create(req.body)
     .then((sport) => {
       console.log('sport', sport)
-      let day = sport.chronometer.endTime.split('T')
+      let day = sport.chronometer.startTime
+
+      let start = new Date(day);
+      start.setUTCHours(0,0,0,0)
+
+      let end = new Date(day);
+      end.setUTCHours(23, 59, 59, 0)
+      
+
       console.log('day', day)
-    //   Diary.findOne(
-    //     {
-    //       $and: [
-    //         {date: {$gte: day}},
-    //         {date: {$lte: new Date("2021-04-20T23:59:59.999Z")}}
-    //       ]
-    //     })
-    //     .then((diary) => {
-    //       console.log('diary', diary)
-    //       res.status(201).json(diary)
-    //       if (!diary) {
-    //         Diary.create({
-    //           sport: sport.id,
-    //           meal: null,
-    //           user: req.currentUser,
-    //           date: Date.now()
-    //         })
-    //           .then((diary) => {
-    //           console.log ('Diary created', diary)
-    //           })
-    //           .catch(next)
-    //       } else if (diary) {
-    //         console.log('sport', sport)
-    //         Diary.findOneAndUpdate(diary._id, { sport: sport.id }, { new: true })
-    //           .then((diary) => {
-    //             console.log('diary updated', diary)
-    //           })
-    //           .catch(next)
-    //       }
-    //     })
-    //     .catch(next)
-    //   res.status(201).json(sport)
+      console.log('start', start)
+      console.log('end', end)
+      
+      Diary.findOne(
+        {
+          $and: [
+            {date: {$gte: start}},
+            {date: {$lte: end}}
+          ]
+        })
+        .then((diary) => {
+          console.log('diary', diary)
+          res.status(201).json(diary)
+          if (!diary) {
+            Diary.create({
+              sport: sport.id,
+              meal: null,
+              user: req.currentUser,
+              date: new Date()
+            })
+              .then((diary) => {
+              console.log ('Diary created', diary)
+              })
+              .catch(next)
+          } else if (diary) {
+            console.log('sport', sport)
+            Diary.findOneAndUpdate(diary._id, { sport: sport.id }, { new: true })
+              .then((diary) => {
+                console.log('diary updated', diary)
+              })
+              .catch(next)
+          }
+        })
+        .catch(next)
+      res.status(201).json(sport)
 
      })
      .catch(next)

@@ -31,15 +31,15 @@ module.exports.login = (req, res, next) => {
 		.catch(next)
 }
 
-module.exports.loginGoogle = (req, res, next) => {
-	jwt.sign({userId: req.user._id}, 'secretkey', {expiresIn:'5 min'}, (err, token) => {
-        if(err){
-            res.sendStatus(500);
-        } else {
-            res.json({token});
-        }
-    });
-}
+// module.exports.loginGoogle = (req, res, next) => {
+// 	jwt.sign({userId: req.user._id}, 'secretkey', {expiresIn:'5 min'}, (err, token) => {
+//         if(err){
+//             res.sendStatus(500);
+//         } else {
+//             res.json({token});
+//         }
+//     });
+// }
 
 module.exports.signup = (req, res, next) => {
 	User.findOne({ username: req.body.username })

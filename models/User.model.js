@@ -13,10 +13,10 @@ const userSchema = mongoose.Schema({
       required: 'Email is required',
       match: [EMAIL_PATTERN, 'Email is not valid']
   },
-  googleID: {
-    type: String,
-    default: null
-  },
+  // googleID: {
+  //   type: String,
+  //   default: null
+  // },
     password: {
       type: String,
       required: 'Password is required',

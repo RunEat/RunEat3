@@ -8,17 +8,29 @@ const Recipe = require('../models/Recipe.model')
 
 module.exports.getDiary = (req, res, next) => {
     const user = req.currentUser
-    const date = new Date(req.query.date)
     //console.log('user', user)
-    //console.log('req.query.date', req.query.date)
+    let start = new Date(req.query.date);
+    start.setUTCHours(0, 0, 0, 0)
 
-    Diary.findOne({ $and: [{user: user}, {date: date}]})
+    let end = new Date(req.query.date);
+    end.setUTCHours(23, 59, 59, 599)
+
+    console.log('start', start)
+    console.log('end', end)
+     
+    Diary.findOne(
+        {
+            $and: [
+              {date: {$gte: start}},
+              {date: {$lte: end}}
+            ]
+          })
         //.populate('user')
         //.populate('sport')
         //populate('meal')
         .then(diary => {
             //console.log ('diary', diary)
-            res.json(diary)
+            res.status(200).json(diary)
         })
         .catch(next)
 }

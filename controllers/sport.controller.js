@@ -17,7 +17,7 @@ module.exports.addSport = (req, res, next) => {
       start.setUTCHours(0,0,0,0)
 
       let end = new Date(day);
-      end.setUTCHours(23, 59, 59, 0)
+      end.setUTCHours(23, 59, 59, 599)
     
       // console.log('day', day)
       // console.log('start', start)

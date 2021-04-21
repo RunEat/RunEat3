@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment')
 
 require('./Meal.model')
 require('./User.model')
@@ -33,6 +34,14 @@ const diarySchema = mongoose.Schema({
       return ret
     }
   }
+  })
+
+diarySchema.virtual('DateOfDiary')
+  .set(function (newDate) {
+  this.date = new Date(newDate)
+  })
+  .get(function () {
+  return this.date.toISOString().substring(0,10)
 })
 
 

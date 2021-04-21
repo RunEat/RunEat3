@@ -10,36 +10,43 @@ module.exports.addSport = (req, res, next) => {
   Sport.create(req.body)
     .then((sport) => {
       console.log('sport', sport)
-      let day = sport.chronometer.endTime
+      let day = sport.chronometer.endTime.split('T')
       console.log('day', day)
-      Diary.findOne({date: day})
-        .then((diary) => {
-          console.log('diary', diary)
-          if (!diary) {
-            Diary.create({
-              sport: sport.id,
-              meal: null,
-              user: req.currentUser,
-              date: Date.now()
-            })
-              .then((diary) => {
-              console.log ('Diary created', diary)
-              })
-              .catch(next)
-          } else if (diary) {
-            console.log('sport', sport)
-            Diary.findOneAndUpdate(diary._id, { sport: sport.id }, { new: true })
-              .then((diary) => {
-                console.log('diary updated', diary)
-              })
-              .catch(next)
-          }
-        })
-        .catch(next)
-      res.status(201).json(sport)
+    //   Diary.findOne(
+    //     {
+    //       $and: [
+    //         {date: {$gte: day}},
+    //         {date: {$lte: new Date("2021-04-20T23:59:59.999Z")}}
+    //       ]
+    //     })
+    //     .then((diary) => {
+    //       console.log('diary', diary)
+    //       res.status(201).json(diary)
+    //       if (!diary) {
+    //         Diary.create({
+    //           sport: sport.id,
+    //           meal: null,
+    //           user: req.currentUser,
+    //           date: Date.now()
+    //         })
+    //           .then((diary) => {
+    //           console.log ('Diary created', diary)
+    //           })
+    //           .catch(next)
+    //       } else if (diary) {
+    //         console.log('sport', sport)
+    //         Diary.findOneAndUpdate(diary._id, { sport: sport.id }, { new: true })
+    //           .then((diary) => {
+    //             console.log('diary updated', diary)
+    //           })
+    //           .catch(next)
+    //       }
+    //     })
+    //     .catch(next)
+    //   res.status(201).json(sport)
 
-    })
-    .catch(next)
+     })
+     .catch(next)
   // Sport.create(req.body)
   //   .then((sport) => {
   //     res.status(201).json(sport)

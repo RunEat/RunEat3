@@ -44,10 +44,6 @@ module.exports.signup = (req, res, next) => {
 		.catch(next)
 }
 
-module.exports.upload = (req, res, next) => {
-
-}
-
 module.exports.edit = (req, res, next) => {
 	console.log('req.body edit', req.body)
 	console.log('req.body.id', req.body.id)

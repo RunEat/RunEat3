@@ -10,10 +10,10 @@ module.exports.getDiary = (req, res, next) => {
     const user = req.currentUser
     //console.log('user', user)
     let start = new Date(req.query.date);
-    start.setUTCHours(0, 0, 0, 0)
+    start.setHours(0, 0, 0, 0) 
 
     let end = new Date(req.query.date);
-    end.setUTCHours(23, 59, 59, 599)
+    end.setHours(23, 59, 59, 599)
 
     console.log('start', start)
     console.log('end', end)

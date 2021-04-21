@@ -14,14 +14,14 @@ module.exports.addSport = (req, res, next) => {
       let day = sport.chronometer.startTime
 
       let start = new Date(day);
-      start.setUTCHours(0,0,0,0)
+      start.setHours(0, 0, 0, 0)
 
       let end = new Date(day);
-      end.setUTCHours(23, 59, 59, 599)
+      end.setHours(23, 59, 59, 599)
     
-      // console.log('day', day)
-      // console.log('start', start)
-      // console.log('end', end)
+      console.log('day', day)
+      console.log('start', start)
+      console.log('end', end)
       
       Diary.findOne(
         {

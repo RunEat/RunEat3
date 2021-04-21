@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require('uuid');
 module.exports.login = (req, res, next) => {
 	const { username, password } = req.body
 
-	User.findOne({ username: username })
+	User.findOne({ username: username, active: true })
 		.then(user => {
 			if (!user) {
 			next(createError(404, { errors: { username: 'username or password are not valid'} }))
@@ -42,6 +42,7 @@ module.exports.signup = (req, res, next) => {
 			} else {
 				return User.create(req.body)
 					.then(createdUser => {
+						console.log('createdUser (l45 user.controller): ', createdUser)
 						sendActivationEmail(createdUser.email, createdUser.token)
 						res.status(201)
 					})
@@ -57,6 +58,7 @@ module.exports.activate = (req, res, next) => {
 			active: true, token: uuidv4()
 		})
 		.then(activeUser => {
+			console.log('activeUser (l61 user.controller): ', activeUser)
 			activeUser ? res.status(200).json(activeUser) : res.status(400).json({})
 		})
 		.catch(next);

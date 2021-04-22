@@ -142,7 +142,7 @@ module.exports.updatePassword = (req, res, next) => {
 					{ id: user._id },
 					process.env.JWT_SECRET || 'JWT Secret - It should be changed',
 					{
-					expiresIn: '1d'
+					expiresIn: '90s'
 					}
 				)
 			})

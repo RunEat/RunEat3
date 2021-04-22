@@ -1,11 +1,14 @@
 const createError = require('http-errors');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
+const { sendActivationEmail } = require('../config/mailer.config');
+const { sendPasswordRecoveryEmail } = require('../config/mailer.config');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports.login = (req, res, next) => {
 	const { username, password } = req.body
 
-	User.findOne({ username: username })
+	User.findOne({ username: username, active: true })
 		.then(user => {
 			if (!user) {
 			next(createError(404, { errors: { username: 'username or password are not valid'} }))
@@ -45,14 +48,33 @@ module.exports.signup = (req, res, next) => {
 	User.findOne({ username: req.body.username })
 		.then(user => {
 			if (user) {
-				next(createError(400, { errors: { username: 'This username is already in use' } }))
+				next(createError(400, { errors: { username: 'This username already exists.' } }))
 			} else {
 				return User.create(req.body)
-					.then(user => res.status(201).json(user))
+					.then(createdUser => {
+						console.log('createdUser (l45 user.controller): ', createdUser)
+						sendActivationEmail(createdUser.email, createdUser.token)
+						res.status(201).send(`Activation Email Sent to ${createdUser.email}`) // TODO -> Modify 
+					})
 			}
 		})
 		.catch(next)
 }
+
+
+module.exports.activate = (req, res, next) => {
+	User.findOneAndUpdate({ 
+			token: req.params.token, active: false 
+		}, {
+			active: true, token: uuidv4()
+		})
+		.then(activeUser => {
+			console.log('activeUser (l61 user.controller): ', activeUser)
+			activeUser ? res.status(200).json(activeUser) : res.status(400).json({})
+		})
+		.catch(next);
+}
+
 
 module.exports.edit = (req, res, next) => {
 	console.log('req.body edit', req.body)
@@ -72,11 +94,6 @@ module.exports.edit = (req, res, next) => {
 				next(createError(404));
 				return;
 			}
-			// A bit redundant since the route is protected
-			// if(user.toString() !== req.currentUser.toString()) {
-			// 	next(createError(403));
-			// 	return;
-			// }
 
 			Object.entries(req.body).forEach(([key, value]) => { // For each body element it creates a key value pair
 				user[key] = value;
@@ -98,7 +115,7 @@ module.exports.profile = (req, res, next) => {
 	User.findById(req.currentUser)
 		.then(user => {
 			if(!user) {
-				next(createERROR(404, 'User not found'))
+				next(createError(404, 'User not found'))
 			} else {
 				res.json(user)
 			}
@@ -107,9 +124,58 @@ module.exports.profile = (req, res, next) => {
 }
 
 module.exports.delete = (req, res, next) => {
-    User.findByIdAndDelete(req.currentUser)
-      .then(() => {
-        res.status(204).json({})
-      })
-      .catch(next)
+  User.findByIdAndDelete(req.currentUser)
+    .then(() => {
+      res.status(204).json({})
+    })
+    .catch((err) => next(err))
+}
+
+module.exports.sendPasswordReset = (req, res, next) => {
+	console.log('req.body', req.body)
+	User.findOne({ email: req.body.email })
+		.then(user => {
+			if (!user) {
+				//next(createError(400, { errors: { email: 'Error.' } }))
+				res.status(200).send('If your email address is in our database you will get a recovery email.') // Email sent confirmation 
+			} else {
+				sendPasswordRecoveryEmail(user.email, user.token)
+				res.status(200).send('If your email address is in our database you will get a recovery email.') // TODO -> Modify 
+			}
+	})
+	.catch(next)
+}
+
+module.exports.updatePassword = (req, res, next) => {
+		User.findOne({ token: req.params.token, active: true })
+		.then(user => {
+			res.json({
+				access_token: jwt.sign(
+					{ id: user._id },
+					process.env.JWT_SECRET || 'JWT Secret - It should be changed',
+					{
+					expiresIn: '90s'
+					}
+				)
+			})
+		})
+		.catch(next)
+}
+
+module.exports.doUpdatePassword = (req, res, next) => {
+	//console.log('req.currentUser', req.currentUser)
+	User.findOne({_id: req.currentUser})
+		.then(user => {
+			//console.log('user', user)
+			if(!user) {
+				next(createError(403, 'Forbidden'));
+				return;
+			} 
+			
+			user.token = uuidv4()
+			user.password = req.body.password
+				
+			return user.save().then(() => res.json({}));
+		})
+		.catch(next);
 }

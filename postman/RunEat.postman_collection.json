@@ -1,34 +1,225 @@
 {
 	"info": {
-		"_postman_id": "6bc1e36f-978e-43db-b5a6-e9f0baa0e2f5",
-		"name": "Amahack",
+		"_postman_id": "b5be1b86-e881-4223-ac33-3c3d3ea48f68",
+		"name": "RunEat",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Users",
+			"name": "User",
 			"item": [
 				{
-					"name": "Create user",
+					"name": "User Login",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"plaso@mail.com\",\n    \"password\": \"12345678\",\n    \"name\": \"Pablo Laso\",\n    \"address\": \"Calle Desengaño 21\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"username\": \"{{userName}}\",\n    \"password\": \"12345678\"\n}"
 						},
 						"url": {
-							"raw": "{{BASE_API_URL}}/users",
+							"raw": "{{BASE_API_URL}}/user/login",
 							"host": [
 								"{{BASE_API_URL}}"
 							],
 							"path": [
-								"users"
+								"user",
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "hirehack",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Signup",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"RunEat\",\n    \"password\": \"12345678\",\n    \"height\": 173,\n    \"weight\": 70,\n    \"age\": 31,\n    \"email\": \"xavirepi@hotmail.com\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/user/signup",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"user",
+								"signup"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "xavirepi",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"disabled": true
+								},
+								{
+									"key": "campus",
+									"value": "Madrid",
+									"disabled": true
+								},
+								{
+									"key": "course",
+									"value": "Web Dev",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "hirehack",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/user/profile",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User Profile",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwN2Q1NmNmMmY0ZTdjMGU5Mjc1MjFmNyIsImlhdCI6MTYxODgyNzAyNCwiZXhwIjoxNjE4OTEzNDI0fQ.KRfvJW3qXNh8DZ4O18uNnVptniW9oOo59cDw-KrDF-Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Javier\",\n    \"surname\": \"Repilado\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/user/edit",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"user",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwN2Q1NmNmMmY0ZTdjMGU5Mjc1MjFmNyIsImlhdCI6MTYxODgyNzIxNywiZXhwIjoxNjE4OTEzNjE3fQ.eHRprp42oZQRcb16p5fvKY_PD8tKwJt6r4v__20uRic",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/user/delete",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"user",
+								"delete"
 							]
 						}
 					},
@@ -37,16 +228,115 @@
 			]
 		},
 		{
-			"name": "Products",
+			"name": "Diary",
 			"item": [
 				{
-					"name": "Create product",
+					"name": "Get Diary",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "POST",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwN2ViZjVhOWM0OTA1NjE2N2VhOTNiMCIsImlhdCI6MTYxODkxOTI3OSwiZXhwIjoxNjE5MDA1Njc5fQ.{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/diary?date={{diaryDate}}",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"diary"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "{{diaryDate}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Diary",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Link\",\n    \"description\": \"Link stop biting me\",\n    \"price\": 20,\n    \"categories\": [\"Pets\"],\n    \"image\": \"https://cataas.com/cat/says/100?width=470&height=264&nocache=100\",\n    \"user\": \"6070d0fa536d01d832b1b567\"\n}",
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "date",
+									"value": "{{date}}",
+									"type": "text",
+									"disabled": true
+								}
+							],
 							"options": {
 								"raw": {
 									"language": "json"
@@ -54,53 +344,250 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_API_URL}}/products",
+							"raw": "{{BASE_API_URL}}/diary/{{diaryID}}",
 							"host": [
 								"{{BASE_API_URL}}"
 							],
 							"path": [
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get products",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_API_URL}}/products",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get product",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_API_URL}}/products/6070d380237e57d96c6aa0c0",
-							"host": [
-								"{{BASE_API_URL}}"
-							],
-							"path": [
-								"products",
-								"6070d380237e57d96c6aa0c0"
+								"diary",
+								"{{diaryID}}"
 							]
 						}
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Sport",
+			"item": [
+				{
+					"name": "Add Sport",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"chronometer\": {\n        \"startTime\": \"2021-04-20T16:00:31.548Z\",\n        \"endTime\": \"2021-04-20T16:14:39.372Z\"\n    },\n    \"caloriesBurned\" : \"400\",\n    \"distance\": \"12\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/diary/sport",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"diary",
+								"sport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Sport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "607ef557ebb916832ec29f76",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_API_URL}}/diary/sport/{{diaryID}}",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"diary",
+								"sport",
+								"{{diaryID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Meal",
+			"item": [
+				{
+					"name": "Get Meal",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/diary/meal",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"diary",
+								"meal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Meal",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwN2Q1NmNmMmY0ZTdjMGU5Mjc1MjFmNyIsImlhdCI6MTYxODgyNzIxNywiZXhwIjoxNjE4OTEzNjE3fQ.eHRprp42oZQRcb16p5fvKY_PD8tKwJt6r4v__20uRic",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/diary/meal",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"diary",
+								"meal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/diary/meal/edit/:id",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"diary",
+								"meal",
+								"edit",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_API_URL}}/diary/meal/delete/:id",
+							"host": [
+								"{{BASE_API_URL}}"
+							],
+							"path": [
+								"diary",
+								"meal",
+								"delete",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_API_URL",
+			"value": "http://localhost:3001/api"
+		},
+		{
+			"key": "JWT",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwN2Q0OThmYWRmMjNhMGFjNjRhZjAxMCIsImlhdCI6MTYxODgyNDcwNCwiZXhwIjoxNjE4OTExMTA0fQ.9B95Szt8Ju_ujvjc9tw4l5HyH61nrKn3xTnyNaAeht4"
 		}
 	]
 }

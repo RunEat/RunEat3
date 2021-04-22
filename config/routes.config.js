@@ -12,7 +12,15 @@ const upload = require('./storage.config')
 
 
 // USER ROUTES
+// Signup
+router.post('/user/signup', userController.signup);
+router.get('/user/activate/:token', userController.activate);
+// Login
 router.post('/user/login', userController.login);
+// Update user and delete account
+router.put('/user/edit', upload.single('avatar'), authMiddleware.isAuthenticated, userController.edit);
+router.get('/user/profile', authMiddleware.isAuthenticated, userController.profile);
+router.post('/user/delete', authMiddleware.isAuthenticated, userController.delete);
 
 //GOOGLE AUTH
 // router.get('/auth/google', passport.authenticate('google', {
@@ -24,11 +32,10 @@ router.post('/user/login', userController.login);
 // router.get('/auth/google/callback', passport.authenticate('google', { session: false }), userController.loginGoogle)
 // router.get('/verify', authMiddleware.isAuthenticated)  //POSTMAN
 
-router.post('/user/signup', userController.signup);
-// router.post('/auth/upload', authMiddleware.isAuthenticated, usersController.upload);
-router.put('/user/edit', upload.single('avatar'), authMiddleware.isAuthenticated, userController.edit);
-router.get('/user/profile', authMiddleware.isAuthenticated, userController.profile);
-router.post('/user/delete', authMiddleware.isAuthenticated, userController.delete);
+// Password Recovery
+router.post('/user/password_reset', userController.sendPasswordReset); // Post sending user Id
+router.get('/user/password_reset/:token', userController.updatePassword); // Token associatd with the user id
+router.put('/user/password_reset', authMiddleware.isAuthenticated, userController.doUpdatePassword); // If token matches updates password
 
 // DIARY ROUTES
 router.get('/diary', authMiddleware.isAuthenticated, diaryController.getDiary) // List

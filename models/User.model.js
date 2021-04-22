@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
+
 const Diary = require('./Diary.model')
+
 
 const EMAIL_PATTERN = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const SALT_WORK_FACTOR = 10;
@@ -64,6 +67,14 @@ const userSchema = mongoose.Schema({
 		  message: () => 'Invalid image URL' // This message is returned
 		},
 	},
+  active: {
+    type: Boolean,
+    default: false,
+  },
+  token: {
+      type: String,
+      default: uuidv4(),
+  },
 },
 {
   timestamps: true,

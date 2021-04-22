@@ -82,7 +82,7 @@ module.exports.addMeal = (req, res, next) => {
                                         console.log('meal before breakfast', meal)
                                         meal.mealType.breakfast = recipe._id
                                         return meal.save()
-                                            .then((meal) => console.log('meal after breakfast', meal))
+                                            .then((meal) => res.status(201).json(meal))
                                     })
                                 break;
                             case 'lunch':
@@ -93,7 +93,7 @@ module.exports.addMeal = (req, res, next) => {
                                         console.log('meal before lunch', meal)
                                         meal.mealType.lunch = recipe._id
                                         return meal.save()
-                                            .then((meal) => console.log('meal after lunch', meal))
+                                            .then((meal) => res.status(201).json(meal))
                                     })
                                 break;
                             case 'dinner':
@@ -104,7 +104,7 @@ module.exports.addMeal = (req, res, next) => {
                                         console.log('meal before dinner', meal)
                                         meal.mealType.dinner = recipe._id
                                         return meal.save()
-                                            .then((meal) => console.log('meal after dinner', meal))
+                                            .then((meal) => res.status(201).json(meal))
                                     })
                                 break;
                             case 'snacks':
@@ -115,7 +115,7 @@ module.exports.addMeal = (req, res, next) => {
                                     console.log('meal before snacks', meal)
                                     meal.mealType.snacks = recipe._id
                                     return meal.save()
-                                        .then((meal) => console.log('meal after snacks', meal))
+                                        .then((meal) => res.status(201).json(meal))
                                 })
                                 break;
                             default:
@@ -229,9 +229,9 @@ module.exports.addMeal = (req, res, next) => {
         .catch(next)
 }
 
-module.exports.editMeal = (req, res, next) => {
+// module.exports.editMeal = (req, res, next) => {
 
-}
+// }
 
 module.exports.deleteMeal = (req, res, next) => {
     Diary.findById(req.params.id)

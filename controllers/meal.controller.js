@@ -57,43 +57,26 @@ module.exports.addMeal = (req, res, next) => {
             console.log('end', end)
 
             Diary.findOne({
-                    $and: [{
-                            date: {
-                                $gte: start
-                            }
-                        },
-                        {
-                            date: {
-                                $lte: end
-                            }
-                        }
-                    ]
+                    $and: [{date: {$gte: start}},{date: {$lte: end}}]
                 })
                 .then((diary) => {
                     if (diary) {
+                        let day = recipe.date
+
+                        let start = new Date(day);
+                        start.setHours(0, 0, 0, 0)
+
+                        let end = new Date(day);
+                        end.setHours(23, 59, 59, 599)
+
                         console.log('if')
                         switch (recipe.mealType[0]) { //En front gestionar respuesta de la API en mealType
                             case 'breakfast':
                                 console.log('recipe2', recipe)
                                 console.log('diary.meal', diary.meal)
 
-                                let day = recipe.date
-                                let start = new Date(day);
-                                start.setHours(0, 0, 0, 0)
-
-                                let end = new Date(day);
-                                end.setHours(23, 59, 59, 599)
-
                                 Meal.findOne({
-                                        $and: [{
-                                            date: {
-                                                $gte: start
-                                            }
-                                        }, {
-                                            date: {
-                                                $lte: end
-                                            }
-                                        }]
+                                        $and: [{ date: { $gte: start } }, { date: { $lte: end } }]
                                     })
                                     .then((meal) => {
                                         console.log('meal before breakfast', meal)
@@ -103,48 +86,41 @@ module.exports.addMeal = (req, res, next) => {
                                     })
                                 break;
                             case 'lunch':
-                                Meal.findOneAndUpdate({
-                                        $and: [{
-                                            date: {
-                                                $gte: start
-                                            }
-                                        }, {
-                                            date: {
-                                                $lte: end
-                                            }
-                                        }]
-                                    }, {
-                                        mealType: {
-                                            lunch: recipe._id
-                                        }
-                                    }, {
-                                        new: true
+                                Meal.findOne({
+                                        $and: [{ date: { $gte: start } }, { date: { $lte: end } }]
                                     })
-                                    .then((meal) => console.log(meal))
+                                    .then((meal) => {
+                                        console.log('meal before lunch', meal)
+                                        meal.mealType.lunch = recipe._id
+                                        return meal.save()
+                                            .then((meal) => console.log('meal after lunch', meal))
+                                    })
                                 break;
                             case 'dinner':
-                                Meal.findOneAndUpdate({
-                                        _id: diary.meal
-                                    }, {
-                                        mealType: {
-                                            dinner: recipe.id
-                                        }
+                                Meal.findOne({
+                                        $and: [{ date: { $gte: start } }, { date: { $lte: end } }]
                                     })
-                                    .then((meal) => res.status(200).json(meal))
+                                    .then((meal) => {
+                                        console.log('meal before dinner', meal)
+                                        meal.mealType.dinner = recipe._id
+                                        return meal.save()
+                                            .then((meal) => console.log('meal after dinner', meal))
+                                    })
                                 break;
                             case 'snacks':
-                                Meal.findOneAndUpdate({
-                                        _id: diary.meal
-                                    }, {
-                                        mealType: {
-                                            snacks: recipe.id
-                                        }
-                                    })
-                                    .then((meal) => res.status(200).json(meal))
+                                Meal.findOne({
+                                    $and: [{ date: { $gte: start } }, { date: { $lte: end } }]
+                                })
+                                .then((meal) => {
+                                    console.log('meal before snacks', meal)
+                                    meal.mealType.snacks = recipe._id
+                                    return meal.save()
+                                        .then((meal) => console.log('meal after snacks', meal))
+                                })
                                 break;
                             default:
                                 console.log('default')
-                                //res.status(304).json({diary})
+                                res.status(304).json({meal})
                                 break;
                         }
                     } else {
@@ -153,83 +129,98 @@ module.exports.addMeal = (req, res, next) => {
                         switch (recipe.mealType[0]) {
                             case 'breakfast':
                                 Meal.create({
-                                        mealType: {
-                                            breakfast: recipe.id,
-                                            lunch: null,
-                                            dinner: null,
-                                            snacks: null
-                                        },
+                                    mealType: { breakfast: recipe.id, lunch: null, dinner: null, snacks: null },
+                                    date: recipe.date
+                                })
+                                .then((meal) => {
+                                    console.log('meal', meal)
+                                    Sport.create({
+                                        chronometer: { startTime: null, endTime: null },
+                                        caloriesBurned: 0,
+                                        distance: 0,
                                         date: recipe.date
-                                    })
-                                    .then((meal) => {
-                                        console.log('meal', meal)
-                                        Sport.create({
-                                                chronometer: {
-                                                    startTime: null,
-                                                    endTime: null
-                                                },
-                                                caloriesBurned: 0,
-                                                distance: 0,
-                                                date: recipe.date
-                                            })
-                                            .then((sport) => {
-                                                Diary.create({
-                                                        sport: sport.id,
-                                                        meal: meal._id,
-                                                        user: req.currentUser,
-                                                        date: day
-                                                    })
-                                                    .then((diary) => {
-                                                        console.log('Diary created', diary)
-                                                        res.status(200).json(diary)
-                                                    })
-                                                    .catch(next)
-                                            })
-                                    })
+                                        })
+                                        .then((sport) => {
+                                            Diary.create({ sport: sport.id, meal: meal._id, user: req.currentUser,date: day})
+                                                .then((diary) => {
+                                                    console.log('Diary created', diary)
+                                                    res.status(200).json(diary)
+                                                })
+                                                .catch(next)
+                                        })
+                                })
                                 break;
                             case 'lunch':
                                 Meal.create({
-                                        mealType: {
-                                            breakfast: null,
-                                            lunch: recipe.id,
-                                            dinner: null,
-                                            snacks: null
-                                        },
+                                    mealType: { breakfast: null, lunch: recipe.id, dinner: null, snacks: null},
+                                    date: recipe.date
+                                })
+                                .then((meal) => {
+                                    console.log('meal', meal)
+                                    Sport.create({
+                                        chronometer: { startTime: null, endTime: null},
+                                        caloriesBurned: 0,
+                                        distance: 0,
+                                        date: recipe.date
                                     })
-                                    .then((meal) => meal)
+                                    .then((sport) => {
+                                        Diary.create({ sport: sport.id, meal: meal._id, user: req.currentUser, date: day})
+                                            .then((diary) => {
+                                                console.log('Diary created', diary)
+                                                res.status(200).json(diary)
+                                            })
+                                            .catch(next)
+                                    })
+                                })
                                 break;
                             case 'dinner':
                                 Meal.create({
-                                        mealType: {
-                                            breakfast: null,
-                                            lunch: null,
-                                            dinner: recipe.id,
-                                            snacks: null
-                                        },
+                                    mealType: { breakfast: null, lunch: null, dinner: recipe.id, snacks: null},
+                                    date: recipe.date
+                                })
+                                .then((meal) => {
+                                    console.log('meal', meal)
+                                    Sport.create({
+                                        chronometer: { startTime: null, endTime: null},
+                                        caloriesBurned: 0,
+                                        distance: 0,
+                                        date: recipe.date
                                     })
-                                    .then((meal) => meal)
+                                    .then((sport) => {
+                                        Diary.create({ sport: sport.id, meal: meal._id, user: req.currentUser, date: day})
+                                        .then((diary) => {
+                                            console.log('Diary created', diary)
+                                            res.status(200).json(diary)
+                                        })
+                                        .catch(next)
+                                    })
+                                })
                                 break;
                             case 'snacks':
                                 Meal.create({
-                                        mealType: {
-                                            breakfast: null,
-                                            lunch: null,
-                                            dinner: null,
-                                            snacks: recipe.id
-                                        },
+                                    mealType: { breakfast: null, lunch: null, dinner: null, snacks: recipe.id},
+                                    date: recipe.date
+                                })
+                                .then((meal) => {
+                                    console.log('meal', meal)
+                                    Sport.create({
+                                        chronometer: { startTime: null, endTime: null},
+                                        caloriesBurned: 0,
+                                        distance: 0,
+                                        date: recipe.date
                                     })
-                                    .then((meal) => meal)
+                                    .then((sport) => {
+                                        Diary.create({ sport: sport.id, meal: meal._id, user: req.currentUser, date: day})
+                                        .then((diary) => {
+                                            console.log('Diary created', diary)
+                                            res.status(200).json(diary)
+                                        })
+                                        .catch(next)
+                                    })
+                                })
                                 break;
                             default:
-                                Meal.create({
-                                        mealType: {
-                                            breakfast: null,
-                                            lunch: null,
-                                            dinner: null,
-                                            snacks: null
-                                        },
-                                    })
-                                    .then((meal) => meal)
+                                console.log('default else meal')
                                 break;
                         }
                     }

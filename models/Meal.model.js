@@ -20,6 +20,10 @@ const mealSchema = mongoose.Schema({
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'recipe'
     }
+  },
+  date: {
+    type: Date,
+    required: true
   }
 },
 {

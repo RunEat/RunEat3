@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-const Meal = require('../models/Meal.model')
+
+require('./Meal.model')
+require('./User.model')
+require('./Sport.model')
 
 const diarySchema = mongoose.Schema({
     sport: {
@@ -30,8 +33,7 @@ const diarySchema = mongoose.Schema({
       return ret
     }
   }
-})
-
+  })
 
 const Diary = mongoose.model('Diary', diarySchema);
 

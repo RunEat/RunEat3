@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Meal= require('../models/Meal.model');
+const Meal= require('./Meal.model');
 
 const recipeSchema = mongoose.Schema({
   name: {
@@ -44,6 +44,9 @@ const recipeSchema = mongoose.Schema({
   dietLabel: {
     type: [String],
   },
+  mealType: {
+    type: [String],
+  },
   instructions: {
     // validator: value => {
 		// 	try {
@@ -56,10 +59,10 @@ const recipeSchema = mongoose.Schema({
 		//   },
 		//   message: () => 'Invalid image URL'
     type: String,
-	},
-  meal: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'meal'
+  },
+  date: {
+    type: Date,
+    required: true
   }
 },
 {

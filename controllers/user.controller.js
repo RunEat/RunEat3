@@ -34,6 +34,16 @@ module.exports.login = (req, res, next) => {
 		.catch(next)
 }
 
+// module.exports.loginGoogle = (req, res, next) => {
+// 	jwt.sign({userId: req.user._id}, 'secretkey', {expiresIn:'5 min'}, (err, token) => {
+//         if(err){
+//             res.sendStatus(500);
+//         } else {
+//             res.json({token});
+//         }
+//     });
+// }
+
 module.exports.signup = (req, res, next) => {
 	User.findOne({ username: req.body.username })
 		.then(user => {
@@ -51,6 +61,7 @@ module.exports.signup = (req, res, next) => {
 		.catch(next)
 }
 
+
 module.exports.activate = (req, res, next) => {
 	User.findOneAndUpdate({ 
 			token: req.params.token, active: false 
@@ -64,15 +75,15 @@ module.exports.activate = (req, res, next) => {
 		.catch(next);
 }
 
-module.exports.upload = (req, res, next) => {
-
-}
 
 module.exports.edit = (req, res, next) => {
 	console.log('req.body edit', req.body)
 	console.log('req.body.id', req.body.id)
 
 	//req.body.id = req.currentUser;
+	if (req.file) {
+		req.body.avatar= req.file.path
+	}
 
 	console.log('req.currentUser', req.currentUser)
 
@@ -109,6 +120,7 @@ module.exports.profile = (req, res, next) => {
 				res.json(user)
 			}
 		})
+		.catch(next)
 }
 
 module.exports.delete = (req, res, next) => {

@@ -11,6 +11,7 @@ require('../config/db.config')
 
 let sportsCreated = []
 let mealsCreated = []
+const createdRecipes = []
 
 mongoose.connection.once('open', () => {
   console.info(`*** Connected to the database ${mongoose.connection.db.databaseName} ***`);
@@ -27,7 +28,8 @@ mongoose.connection.once('open', () => {
                 endTime: new Date
             },
             caloriesBurned: Math.floor(Math.random() * 500),
-            distance: Math.floor(Math.random() * 25)
+            distance: Math.floor(Math.random() * 25),
+            date: new Date().toDateString()
         })
         }
         
@@ -39,10 +41,8 @@ mongoose.connection.once('open', () => {
 
         sportsCreated = sports;
 
-        const recipes = []
-
         for (let index = 0; index < 4; index++) {
-        recipes.push({
+        createdRecipes.push({
             name: faker.name.title(),
             macros: {
                 carbs: Math.floor(Math.random() * 100),
@@ -52,33 +52,52 @@ mongoose.connection.once('open', () => {
             calories: Math.floor(Math.random() * 1000),
             image: faker.internet.url(),
             ingredients: faker.lorem.words(), //DUDO
-            instructions: 'http://www.google.es'
+            instructions: 'http://www.google.es',
+            meal: null,
+            date: new Date().toDateString()
         })
         }
         
-        return Recipe.create(recipes) 
+        return Recipe.create(createdRecipes) 
     })
-      .then((recipes) => {
-        //console.log(recipes)
-        console.log(`${recipes.length} recipes created`)
-
-      const meals = []
+    .then((recipes) => {
+      //console.log(recipes)
+      console.log(`${recipes.length} recipes created`)
+      
+      //const meals = []
 
       for (let index = 0; index < 1; index++) {
-        meals.push({
+        mealsCreated.push({
             mealType: { 
                 breakfast: recipes[0]._id,
                 lunch: recipes[1]._id,
                 dinner: recipes[2]._id,
                 snacks: recipes[3]._id
-            }   
+            },
+            date: new Date().toDateString()
         })
       }
+      // console.log('mealsCreated[0].mealType.breakfastreakfast', mealsCreated[0].mealType.breakfast)
 
-      return Meal.create(meals)
+      // createdRecipes[0].meal = mealsCreated[0].mealType.breakfast
+      // console.log('recipes', createdRecipes)
+
+      return Meal.create(mealsCreated)
       })
       .then((meals) => {
         console.log(`${meals.length} recipes created`)
+        // console.log('mealsID', meals[0]._id)
+        // console.log('createdRecipes1', createdRecipes)
+
+        // let position = createdRecipes[0].meal
+        
+        // console.log('position', position)
+
+        // position = ObjectId(`${meals[0]._id}`)
+        // recipeID = meals[0].mealType.breakfast
+        
+        
+        // Recipe.find(recipeID, {meal: position})
 
         mealsCreated = meals
 
@@ -107,10 +126,10 @@ mongoose.connection.once('open', () => {
 
       for (let index = 0; index < 1; index++) {
         diaries.push({
-            sport: sportsCreated._id,
-            meal: mealsCreated._id,
+            sport: sportsCreated[0]._id,
+            meal: mealsCreated[0]._id,
             user: users[0].id,
-            date: new Date,   
+            date: new Date().toDateString(),   
         })
       }
 

@@ -28,7 +28,8 @@ mongoose.connection.once('open', () => {
                 endTime: new Date
             },
             caloriesBurned: Math.floor(Math.random() * 500),
-            distance: Math.floor(Math.random() * 25)
+            distance: Math.floor(Math.random() * 25),
+            date: new Date().toDateString()
         })
         }
         
@@ -52,7 +53,8 @@ mongoose.connection.once('open', () => {
             image: faker.internet.url(),
             ingredients: faker.lorem.words(), //DUDO
             instructions: 'http://www.google.es',
-            meal: null
+            meal: null,
+            date: new Date().toDateString()
         })
         }
         

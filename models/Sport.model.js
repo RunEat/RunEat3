@@ -5,24 +5,28 @@ const sportSchema = mongoose.Schema({
   chronometer: {
     startTime: {
       type: Date,
-      required: true
+      //required: true
     },
     endTime: {
       type: Date,
-      required: true
+      //required: true
     }
   },
   caloriesBurned: {
     type: Number,
-    required: true
+    //required: true
   },
   distance: {
     type: Number,
-    required: true
+    //required: true
   },
   pace: {
     type: Number
   },
+  date: {
+    type: Date,
+    required: true
+  }
   // location: {
   //   type: {
   //     type: String,
@@ -35,8 +39,7 @@ const sportSchema = mongoose.Schema({
   //     required: true
   //   }
   // },
-},
-{
+}, {
   timestamps: true,
   toJSON: {
     virtuals: true,

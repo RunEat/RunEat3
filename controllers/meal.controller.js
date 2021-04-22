@@ -156,21 +156,6 @@ module.exports.addMeal = (req, res, next) => {
                     }            
                 }
             })
-            // .then((meal) => {
-            //     console.log('meal', meal)
-            //     Diary.create({
-            //         sport: null,
-            //         meal: meal._id,
-            //         user: req.currentUser,
-            //         date: day
-            //     })
-            //     .then((diary) => {
-            //         console.log ('Diary created', diary)
-            //         res.status(200).json(diary)
-            //     })
-            //     .catch(next)
-            // //res.status(201).json(meal)
-            // })
         })
         .catch(next)
 }

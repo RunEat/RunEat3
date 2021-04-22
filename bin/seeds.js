@@ -71,7 +71,8 @@ mongoose.connection.once('open', () => {
                 lunch: recipes[1]._id,
                 dinner: recipes[2]._id,
                 snacks: recipes[3]._id
-            }   
+            },
+            date: new Date().toDateString()
         })
       }
       // console.log('mealsCreated[0].mealType.breakfastreakfast', mealsCreated[0].mealType.breakfast)

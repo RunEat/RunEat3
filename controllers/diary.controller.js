@@ -27,7 +27,7 @@ module.exports.getDiary = (req, res, next) => {
           })
         //.populate('user')
         //.populate('sport')
-        //populate('meal')
+        //.populate('meal')
         .then(diary => {
             //console.log ('diary', diary)
             res.status(200).json(diary)

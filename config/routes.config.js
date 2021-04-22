@@ -30,6 +30,6 @@ router.delete('/diary/sport/:id', authMiddleware.isAuthenticated, sportControlle
 router.get('/diary/meal', authMiddleware.isAuthenticated, mealController.getMeal) // List
 router.post('/diary/meal', authMiddleware.isAuthenticated, mealController.addMeal) // Create
 router.put('/diary/meal/edit', authMiddleware.isAuthenticated, mealController.editMeal) // Update
-router.post('/diary/meal/delete', authMiddleware.isAuthenticated, mealController.deleteMeal) // Delete
+router.delete('/diary/meal/:id', authMiddleware.isAuthenticated, mealController.deleteMeal) // Delete
 
 module.exports = router;

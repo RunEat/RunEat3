@@ -36,63 +36,123 @@ module.exports.getMeal = (req, res, next) => {
 
 module.exports.addMeal = (req, res, next) => {
     Recipe.create(req.body)
-    .then((recipe) => {
-      //console.log('sport', sport)
-        if (recipe.mealType == breakfast) {
-            Meal.create({
+        .then((recipe) => {
+            console.log('recipe1', recipe)
+            let day = recipe.date
+            let start = new Date(day);
+            start.setHours(0, 0, 0, 0)
+
+            let end = new Date(day);
+            end.setHours(23, 59, 59, 599)
+            
+            console.log('day', day)
+            console.log('start', start)
+            console.log('end', end)
+
+            Diary.findOne({
+                $and: [
+                    {date: {$gte: start}},
+                    {date: {$lte: end}}
+                ]
             })
-
-        }
-      let day = sport.chronometer.startTime
-
-      let start = new Date(day);
-      start.setHours(0, 0, 0, 0)
-
-      let end = new Date(day);
-      end.setHours(23, 59, 59, 599)
-    
-      console.log('day', day)
-      console.log('start', start)
-      console.log('end', end)
-      
-      Diary.findOne(
-        {
-          $and: [
-            {date: {$gte: start}},
-            {date: {$lte: end}}
-          ]
-        })
-        .then((diary) => {
-          //console.log('diary', diary)
-          //console.log('sport', sport)
-          if (diary) {
-            console.log('diary')
-            Diary.findOneAndUpdate({_id: diary._id}, {sport: sport.id})
-              .then((diary) => {
-                console.log('diary updated', diary) //En consola muestra el diary sin actualizar pero lo actualiza en db.
-                res.status(200).json(diary)
-              })
-              .catch(next)
-          } else {
-            console.log('else')
-            Diary.create({
-                sport: sport.id,
-                meal: null,
-                user: req.currentUser,
-                date: day
-              })
-              .then((diary) => {
-                console.log ('Diary created', diary)
-                res.status(200).json(diary)
-              })
-              .catch(next)
-          }
+            .then((diary) => {
+                if (diary) {
+                    console.log('if')
+                    switch (recipe.mealType[0]) { //En front gestionar respuesta de la API en mealType
+                        case 'breakfast':
+                            console.log('recipe2', recipe)
+                            console.log('diary.meal', diary.meal)
+                            Meal.findOneAndUpdate(
+                                {
+                                    $and: [{ date: { $gte: start } }, { date: { $lte: end } }]
+                                },
+                                { mealType: { breakfast: recipe._id } }
+                            )
+                                .then((meal) => console.log(meal))
+                            break;
+                        case 'lunch':
+                            Meal.findOneAndUpdate({_id: diary.meal}, {mealType: { lunch: recipe.id }})
+                                .then((meal) => res.status(200).json(meal))
+                            break;
+                        case 'dinner':
+                            Meal.findOneAndUpdate({_id: diary.meal}, {mealType: { dinner: recipe.id }})
+                                .then((meal) => res.status(200).json(meal))
+                            break;
+                        case 'snacks':
+                            Meal.findOneAndUpdate({ _id: diary.meal }, { mealType: { snacks: recipe.id } })
+                                .then((meal) => res.status(200).json(meal))
+                            break;
+                        default:
+                            console.log('default')
+                            //res.status(304).json({diary})
+                            break;
+                    }
+                } else {
+                    console.log('else')
+                    switch (recipe.mealType[0]) {
+                        case 'breakfast':
+                            Meal.create({
+                                mealType: { breakfast: recipe.id, lunch: null, dinner: null, snacks: null },
+                            })
+                            .then((meal) => {
+                                console.log('meal', meal)
+                                Diary.create({
+                                    sport: null,
+                                    meal: meal._id,
+                                    user: req.currentUser,
+                                    date: day
+                                })
+                                .then((diary) => {
+                                    console.log ('Diary created', diary)
+                                    res.status(200).json(diary)
+                                })
+                                .catch(next)
+                            })
+                            break;
+                        case 'lunch':
+                            Meal.create({
+                                mealType: { breakfast: null, lunch: recipe.id, dinner: null, snacks: null },
+                            })
+                            .then((meal) => meal)
+                            break;
+                        case 'dinner':
+                            Meal.create({
+                                mealType: { breakfast: null, lunch: null, dinner: recipe.id, snacks: null },
+                            })
+                            .then((meal) => meal)
+                            break;
+                        case 'snacks':
+                            Meal.create({
+                                mealType: { breakfast: null, lunch: null, dinner: null, snacks: recipe.id },
+                            })
+                            .then((meal) => meal)
+                            break;
+                        default:
+                            Meal.create({
+                                mealType: { breakfast: null, lunch: null, dinner: null, snacks: null },
+                            })
+                            .then((meal) => meal)
+                            break;
+                    }            
+                }
+            })
+            // .then((meal) => {
+            //     console.log('meal', meal)
+            //     Diary.create({
+            //         sport: null,
+            //         meal: meal._id,
+            //         user: req.currentUser,
+            //         date: day
+            //     })
+            //     .then((diary) => {
+            //         console.log ('Diary created', diary)
+            //         res.status(200).json(diary)
+            //     })
+            //     .catch(next)
+            // //res.status(201).json(meal)
+            // })
         })
         .catch(next)
-      res.status(201).json(sport)
-
-     })
-     .catch(next)
 }
 
 module.exports.editMeal = (req, res, next) => {

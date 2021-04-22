@@ -44,6 +44,9 @@ const recipeSchema = mongoose.Schema({
   dietLabel: {
     type: [String],
   },
+  mealType: {
+    type: [String],
+  },
   instructions: {
     // validator: value => {
 		// 	try {
@@ -56,7 +59,11 @@ const recipeSchema = mongoose.Schema({
 		//   },
 		//   message: () => 'Invalid image URL'
     type: String,
-	}
+  },
+  date: {
+    type: Date,
+    required: true
+  }
 },
 {
   timestamps: true,

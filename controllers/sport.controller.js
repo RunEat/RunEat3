@@ -37,27 +37,39 @@ module.exports.addSport = (req, res, next) => {
             console.log('diary')
             Diary.findOneAndUpdate({_id: diary._id}, {sport: sport.id})
               .then((diary) => {
-                console.log('diary updated', diary) //En consola muestra el diary sin actualizar pero lo actualiza en db.
+                //console.log('diary updated', diary) //En consola muestra el diary sin actualizar pero lo actualiza en db.
                 res.status(200).json(diary)
               })
               .catch(next)
           } else {
             console.log('else')
-            Diary.create({
-                sport: sport.id,
-                meal: null,
-                user: req.currentUser,
-                date: day
-              })
-              .then((diary) => {
-                console.log ('Diary created', diary)
-                res.status(200).json(diary)
-              })
-              .catch(next)
+            Meal.create({
+                  mealType: {
+                    breakfast: null,
+                    lunch: null,
+                    dinner: null,
+                    snacks: null
+                  },
+                  date: day
+            })
+            .then((meal) => {
+              Diary.create({
+                  sport: sport.id,
+                  meal: meal.id,
+                  user: req.currentUser,
+                  date: day
+                })
+                .then((diary) => {
+                  console.log ('Diary created', diary)
+                  res.status(200).json(diary)
+                })
+                .catch(next)
+            })
+            .catch(next)
           }
         })
         .catch(next)
-      res.status(201).json(sport)
+      //res.status(201).json(sport)
 
      })
      .catch(next)

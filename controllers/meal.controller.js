@@ -66,13 +66,22 @@ module.exports.addMeal = (req, res, next) => {
                                 {
                                     $and: [{ date: { $gte: start } }, { date: { $lte: end } }]
                                 },
-                                { mealType: { breakfast: recipe._id } }
+                                { mealType: { breakfast: recipe._id }}
+                                ,
+                                { new: true }
                             )
                                 .then((meal) => console.log(meal))
                             break;
                         case 'lunch':
-                            Meal.findOneAndUpdate({_id: diary.meal}, {mealType: { lunch: recipe.id }})
-                                .then((meal) => res.status(200).json(meal))
+                            Meal.findOneAndUpdate(
+                                {
+                                    $and: [{ date: { $gte: start } }, { date: { $lte: end } }]
+                                },
+                                { mealType: { lunch: recipe._id }}
+                                ,
+                                { new: true }
+                            )
+                                .then((meal) => console.log(meal))
                             break;
                         case 'dinner':
                             Meal.findOneAndUpdate({_id: diary.meal}, {mealType: { dinner: recipe.id }})
@@ -96,17 +105,28 @@ module.exports.addMeal = (req, res, next) => {
                             })
                             .then((meal) => {
                                 console.log('meal', meal)
-                                Diary.create({
-                                    sport: null,
-                                    meal: meal._id,
-                                    user: req.currentUser,
-                                    date: day
+                                Sport.create({
+                                    chronometer: {
+                                        startTime: null,
+                                        endTime: null
+                                    },
+                                    caloriesBurned: null,
+                                    distance: null,
+                                    pace: null,
                                 })
-                                .then((diary) => {
-                                    console.log ('Diary created', diary)
-                                    res.status(200).json(diary)
+                                .then((sport) => {
+                                    Diary.create({
+                                        sport: sport.id,
+                                        meal: meal._id,
+                                        user: req.currentUser,
+                                        date: day
+                                    })
+                                    .then((diary) => {
+                                        console.log ('Diary created', diary)
+                                        res.status(200).json(diary)
+                                    })
+                                    .catch(next)  
                                 })
-                                .catch(next)
                             })
                             break;
                         case 'lunch':

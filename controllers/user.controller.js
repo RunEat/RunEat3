@@ -137,38 +137,32 @@ module.exports.sendPasswordReset = (req, res, next) => {
 module.exports.updatePassword = (req, res, next) => {
 		User.findOne({ token: req.params.token, active: true })
 		.then(user => {
-			if (!user) {
-				next(createError(404, { errors: { username: 'username or password are not valid'} }))
-			} else {
-				res.json({
-					access_token: jwt.sign(
-						{ id: user._id },
-						process.env.JWT_SECRET || 'JWT Secret - It should be changed',
-						{
-						expiresIn: '90s'
-						}
-					)
-				})
-			}
+			res.json({
+				access_token: jwt.sign(
+					{ id: user._id },
+					process.env.JWT_SECRET || 'JWT Secret - It should be changed',
+					{
+					expiresIn: '1d'
+					}
+				)
+			})
 		})
 		.catch(next)
 }
 
 module.exports.doUpdatePassword = (req, res, next) => {
-	console.log('req.currentUser', req.currentUser)
-	User.findOneAndUpdate({_id: req.currentUser}, { token: uuidv4()})
+	//console.log('req.currentUser', req.currentUser)
+	User.findOne({_id: req.currentUser})
 		.then(user => {
+			//console.log('user', user)
 			if(!user) {
-				next(createError(404));
+				next(createError(403, 'Forbidden'));
 				return;
-			} else if (!req.currentUser) {
-
-			}
-
-			Object.entries(req.body).forEach(([key, value]) => { // For each body element it creates a key value pair
-				user[key] = value;
-			});
-
+			} 
+			
+			user.token = uuidv4()
+			user.password = req.body.password
+				
 			return user.save().then(() => res.json({}));
 		})
 		.catch(next);

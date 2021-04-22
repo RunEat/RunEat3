@@ -20,7 +20,7 @@ router.post('/user/delete', authMiddleware.isAuthenticated, userController.delet
 // Password Recovery
 router.post('/user/password_reset', userController.sendPasswordReset); // Post sending user Id
 router.get('/user/password_reset/:token', userController.updatePassword); // Token associatd with the user id
-router.put('/user/password_reset', userController.doUpdatePassword); // If token matches updates password
+router.put('/user/password_reset', authMiddleware.isAuthenticated, userController.doUpdatePassword); // If token matches updates password
 
 // DIARY ROUTES
 router.get('/diary', authMiddleware.isAuthenticated, diaryController.getDiary) // List

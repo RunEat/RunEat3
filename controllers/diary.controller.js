@@ -25,11 +25,11 @@ module.exports.getDiary = (req, res, next) => {
               {date: {$lte: end}}
             ]
           })
-        //.populate('user')
-        //.populate('sport')
-        //.populate('meal')
+        .populate('user')
+        .populate('sport')
+        .populate('meal')
         .then(diary => {
-            //console.log ('diary', diary)
+            console.log ('diary', diary.sport.distance)
             res.status(200).json(diary)
         })
         .catch(next)

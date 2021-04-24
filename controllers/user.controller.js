@@ -78,9 +78,11 @@ module.exports.activate = (req, res, next) => {
 
 module.exports.edit = (req, res, next) => {
 	console.log('req.body edit', req.body)
-	console.log('req.body.id', req.body.id)
+	//console.log('req.body.id', req.body.id)
 
+	console.log('req.file', req.file)
 	//req.body.id = req.currentUser;
+	
 	if (req.file) {
 		req.body.avatar= req.file.path
 	}
@@ -99,7 +101,7 @@ module.exports.edit = (req, res, next) => {
 				user[key] = value;
 			});
 
-			return user.save().then(() => res.json({}));
+			return user.save().then(() => res.json(user));
 		})
 		.catch(next);
 }

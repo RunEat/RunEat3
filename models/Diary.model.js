@@ -7,15 +7,15 @@ require('./Sport.model')
 const diarySchema = mongoose.Schema({
     sport: {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'sport'
+        ref: 'Sport'
     },
     meal: {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'meal'
+        ref: 'Meal'
     },
     user: {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'user',
+        ref: 'User',
         required: true
     },
     date: {

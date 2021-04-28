@@ -18,21 +18,26 @@ module.exports.getDiary = (req, res, next) => {
     console.log('start', start)
     console.log('end', end)
      
-    Diary.findOne(
-        {
-            $and: [
-              {date: {$gte: start}},
-              {date: {$lte: end}}
-            ]
-          })
-        .populate('user')
-        .populate('sport')
-        .populate('meal')
-        .then(diary => {
-            console.log ('diary.sport', diary.sport.distance)
-            res.status(200).json(diary)
+    Diary.findOne({
+      $and: [{ date: { $gte: start } }, { date: { $lte: end } }],
+    })
+        .populate("user sport meal")
+        //.populate("meal")
+        // .populate('breakfast lunch dinner snacks')
+        .populate({
+          path: "meal",
+          populate: {
+            path: "mealType",
+                populate: {
+                path: "breakfast lunch dinner snacks"
+            }
+          },
         })
-        .catch(next)
+      .then((diary) => {
+        console.log("diary.meal", diary.meal);
+        res.status(200).json(diary);
+      })
+      .catch(next);
 }
 
 module.exports.deleteDiary = (req, res, next) => {

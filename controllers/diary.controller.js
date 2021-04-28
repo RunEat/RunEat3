@@ -29,7 +29,7 @@ module.exports.getDiary = (req, res, next) => {
         .populate('sport')
         .populate('meal')
         .then(diary => {
-            console.log ('diary', diary.sport.distance)
+            console.log ('diary.sport', diary.sport.distance)
             res.status(200).json(diary)
         })
         .catch(next)

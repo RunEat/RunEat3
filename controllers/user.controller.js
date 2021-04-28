@@ -149,8 +149,9 @@ module.exports.sendPasswordReset = (req, res, next) => {
 }
 
 module.exports.updatePassword = (req, res, next) => {
+	console.log("req.params.token", req.params.token);
 		User.findOne({ token: req.params.token, active: true })
-		.then(user => {
+			.then(user => {
 			res.json({
 				access_token: jwt.sign(
 					{ id: user._id },
@@ -165,19 +166,20 @@ module.exports.updatePassword = (req, res, next) => {
 }
 
 module.exports.doUpdatePassword = (req, res, next) => {
-	//console.log('req.currentUser', req.currentUser)
+	console.log("req.currentUser", req.currentUser);
 	User.findOne({_id: req.currentUser})
-		.then(user => {
-			//console.log('user', user)
+	.then(user => {
+		console.log('user', user)
+		console.log('req.currentUser', req.currentUser)
 			if(!user) {
 				next(createError(403, 'Forbidden'));
 				return;
 			} 
-			
 			user.token = uuidv4()
 			user.password = req.body.password
-				
+					
 			return user.save().then(() => res.json({}));
+			
 		})
 		.catch(next);
 }

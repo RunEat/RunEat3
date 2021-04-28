@@ -6,19 +6,19 @@ const mealSchema = mongoose.Schema({
   mealType: {
     breakfast: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'recipe'
+      ref: 'Recipe'
     },
     lunch: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'recipe'
+      ref: 'Recipe'
     },
     dinner: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'recipe'
+      ref: 'Recipe'
     },
     snacks: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'recipe'
+      ref: 'Recipe'
     }
   },
   date: {

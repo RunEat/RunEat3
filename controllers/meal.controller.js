@@ -29,14 +29,23 @@ module.exports.getMeal = (req, res, next) => {
                 }
             ]
         })
-        .populate('Meal')
+        .populate('meal')
         .then((diary) => {
             console.log('diary', diary)
-            Meal.find(diary.meal)
-                .populate('recipe')
-                .then(meal => {
-                    res.status(200).json(meal)
+            Meal.findOne(diary.meal)
+                .populate('mealType')
+                // .populate('breakfast lunch dinner snacks')
+                .populate({
+                    path: "mealType",
+                    populate: {
+                        path: "breakfast",
+                        model: 'Recipe'
+                    },
                 })
+              .then((meal) => {
+                console.log("recipe", meal.mealtype.name);
+                res.status(200).json(meal);
+              });
         })
         .catch(next)
 }

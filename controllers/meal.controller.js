@@ -38,12 +38,12 @@ module.exports.getMeal = (req, res, next) => {
                 .populate({
                     path: "mealType",
                     populate: {
-                        path: "breakfast",
+                        path: "breakfast lunch dinner snacks",
                         model: 'Recipe'
                     },
                 })
               .then((meal) => {
-                console.log("recipe", meal.mealtype.name);
+                console.log("recipe", meal.mealtype);
                 res.status(200).json(meal);
               });
         })

@@ -19,39 +19,44 @@ const userSchema = mongoose.Schema({
   //   type: String,
   //   default: null
   // },
-    password: {
-      type: String,
-      required: 'Password is required',
-      minLength: [8, 'Password must have 8 characters or more']
-    },
-    username: {
-      type: String,
-      required: 'Username is required'
-    },
-    name: {
-      type: String,
-    },
-    surname: {
-      type: String,
-    },
-    age: {
-        type: Number,
-        required: 'Age is required',
-        min: 16,
-        max: 120
-    },
-    weight: {
-        type: Number,
-        required: 'Weight is required',
-        min: 40,
-        max: 300
-    },
-    height: {
-        type: Number,
-        required: 'Height is required',
-        min: 130,
-        max: 230
-    },
+  password: {
+    type: String,
+    required: 'Password is required',
+    minLength: [8, 'Password must have 8 characters or more']
+  },
+  username: {
+    type: String,
+    required: 'Username is required'
+  },
+  name: {
+    type: String,
+  },
+  surname: {
+    type: String,
+  },
+  age: {
+      type: Number,
+      required: 'Age is required',
+      min: 16,
+      max: 120
+  },
+  weight: {
+      type: Number,
+      required: 'Weight is required',
+      min: 40,
+      max: 300
+  },
+  height: {
+      type: Number,
+      required: 'Height is required',
+      min: 130,
+      max: 230
+  },
+  gender: {
+    type: [String],
+    required: true,
+    enum: ['male', 'female', 'other']
+  },
 	avatar: {
 		type: String,
 		validate: { // Mongoose method to validate images

@@ -126,6 +126,7 @@ module.exports.profile = (req, res, next) => {
 }
 
 module.exports.delete = (req, res, next) => {
+	console.log(req.currentUser)
   User.findByIdAndDelete(req.currentUser)
     .then(() => {
       res.status(204).json({})

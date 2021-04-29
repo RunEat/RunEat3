@@ -34,7 +34,7 @@ module.exports.getDiary = (req, res, next) => {
           },
         })
       .then((diary) => {
-        console.log("diary.meal", diary.meal);
+        //console.log("diary.meal", diary.meal);
         res.status(200).json(diary);
       })
       .catch(next);

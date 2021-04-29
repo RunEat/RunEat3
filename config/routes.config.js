@@ -20,7 +20,7 @@ router.post('/user/login', userController.login);
 // Update user and delete account
 router.put('/user/edit', upload.single('avatar'), authMiddleware.isAuthenticated, userController.edit);
 router.get('/user/profile', authMiddleware.isAuthenticated, userController.profile);
-router.post('/user/delete', authMiddleware.isAuthenticated, userController.delete);
+router.delete('/user/delete', authMiddleware.isAuthenticated, userController.delete);
 
 //GOOGLE AUTH
 // router.get('/auth/google', passport.authenticate('google', {

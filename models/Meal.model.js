@@ -2,42 +2,49 @@ const mongoose = require('mongoose');
 const Diary = require('./Diary.model');
 const Recipe = require ('./Recipe.model')
 
-const mealSchema = mongoose.Schema({
-  mealType: {
-    breakfast: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Recipe'
+const mealSchema = mongoose.Schema(
+  {
+    mealType: {
+      breakfast: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Recipe",
+      },
+      lunch: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Recipe",
+      },
+      dinner: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Recipe",
+      },
+      snacks: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Recipe",
+      },
     },
-    lunch: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Recipe'
+    date: {
+      type: Date,
+      required: true,
     },
-    dinner: {
+    user: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Recipe'
-    },
-    snacks: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Recipe'
+      ref: "User",
+      required: true,
     }
   },
-  date: {
-    type: Date,
-    required: true
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        ret.id = doc._id;
+        delete ret._id;
+        delete ret._v;
+        return ret;
+      },
+    },
   }
-},
-{
-  timestamps: true,
-  toJSON: {
-    virtuals: true,
-    transform: (doc, ret) => {
-      ret.id = doc._id
-      delete ret._id
-      delete ret._v
-      return ret
-    }
-  }
-})
+);
 
 mealSchema.virtual('Diary', {
   ref: Diary.modelName,

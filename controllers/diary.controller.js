@@ -33,9 +33,13 @@ module.exports.getDiary = (req, res, next) => {
             }
           },
         })
-      .then((diary) => {
-        //console.log("diary.meal", diary.meal);
-        res.status(200).json(diary);
+        .then((diary) => {
+            if (diary) {
+                //console.log("diary.meal", diary.meal);
+                res.status(200).json(diary);   
+            } else {
+                res.status(404).json({});
+            }
       })
       .catch(next);
 }

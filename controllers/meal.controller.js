@@ -31,21 +31,30 @@ module.exports.getMeal = (req, res, next) => {
   })
     .populate("meal")
     .then((diary) => {
-      console.log("diary", diary);
-      Meal.findOne(diary.meal)
-        .populate("mealType")
-        // .populate('breakfast lunch dinner snacks')
-        .populate({
-          path: "mealType",
-          populate: {
-            path: "breakfast lunch dinner snacks",
-            model: "Recipe",
-          },
-        })
-        .then((meal) => {
-          console.log("recipe", meal.mealtype);
-          res.status(200).json(meal);
-        });
+      if (diary) {
+        console.log("diary", diary);
+        return Meal.findOne(diary.meal)
+          .populate("mealType")
+          // .populate('breakfast lunch dinner snacks')
+          .populate({
+            path: "mealType",
+            populate: {
+              path: "breakfast lunch dinner snacks",
+              model: "Recipe",
+            },
+          })
+          .then((meal) => {
+            console.log("recipe", meal.mealtype);
+            res.status(200).json(meal);
+          }); 
+      } else { 
+          // next(
+          //   createError(404, {
+          //     errors: { diary: "Diary is not created" },
+          //   })
+          //)
+        res.status(404).json({})
+      }
     })
     .catch(next);
 };
@@ -138,6 +147,7 @@ module.exports.addMeal = (req, res, next) => {
                   snacks: null,
                 },
                 date: recipe.date,
+                user: req.currentUser
               }).then((meal) => {
                 console.log("meal", meal);
                 Sport.create({
@@ -148,6 +158,7 @@ module.exports.addMeal = (req, res, next) => {
                   caloriesBurned: 0,
                   distance: 0,
                   date: recipe.date,
+                  user: req.currentUser
                 }).then((sport) => {
                   Diary.create({
                     sport: sport.id,
@@ -172,6 +183,7 @@ module.exports.addMeal = (req, res, next) => {
                   snacks: null,
                 },
                 date: recipe.date,
+                user: req.currentUser,
               }).then((meal) => {
                 console.log("meal", meal);
                 Sport.create({
@@ -179,6 +191,7 @@ module.exports.addMeal = (req, res, next) => {
                   caloriesBurned: 0,
                   distance: 0,
                   date: recipe.date,
+                  user: req.currentUser,
                 }).then((sport) => {
                   Diary.create({
                     sport: sport.id,
@@ -203,6 +216,7 @@ module.exports.addMeal = (req, res, next) => {
                   snacks: null,
                 },
                 date: recipe.date,
+                user: req.currentUser,
               }).then((meal) => {
                 console.log("meal", meal);
                 Sport.create({
@@ -210,6 +224,7 @@ module.exports.addMeal = (req, res, next) => {
                   caloriesBurned: 0,
                   distance: 0,
                   date: recipe.date,
+                  user: req.currentUser,
                 }).then((sport) => {
                   Diary.create({
                     sport: sport.id,
@@ -234,6 +249,7 @@ module.exports.addMeal = (req, res, next) => {
                   snacks: recipe.id,
                 },
                 date: recipe.date,
+                user: req.currentUser,
               }).then((meal) => {
                 console.log("meal", meal);
                 Sport.create({
@@ -241,6 +257,7 @@ module.exports.addMeal = (req, res, next) => {
                   caloriesBurned: 0,
                   distance: 0,
                   date: recipe.date,
+                  user: req.currentUser,
                 }).then((sport) => {
                   Diary.create({
                     sport: sport.id,
@@ -290,6 +307,7 @@ module.exports.editMeal = (req, res, next) => {
     ],
   })
     .then((meal) => {
+      console.log('meal', meal)
       meal.mealType[mealType] = null;
       return meal.save().then((meal) => {
         return (

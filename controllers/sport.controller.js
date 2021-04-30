@@ -59,28 +59,29 @@ module.exports.addSport = (req, res, next) => {
           .then((sport) => { 
             console.log('sport created else diary does not exist', sport)
             Meal.create({
-                mealType: {
-                  breakfast: null,
-                  lunch: null,
-                  dinner: null,
-                  snacks: null
-                },
-                date: day
-              })
+              mealType: {
+                breakfast: null,
+                lunch: null,
+                dinner: null,
+                snacks: null,
+              },
+              date: day,
+              user: req.currentUser,
+            })
               .then((meal) => {
                 Diary.create({
-                    sport: sport.id,
-                    meal: meal.id,
-                    user: req.currentUser,
-                    date: day
-                  })
+                  sport: sport.id,
+                  meal: meal.id,
+                  user: req.currentUser,
+                  date: day,
+                })
                   .then((diary) => {
-                    console.log('Diary created', diary)
-                    res.status(200).json(diary)
+                    console.log("Diary created", diary);
+                    res.status(200).json(diary);
                   })
-                  .catch(next)
+                  .catch(next);
               })
-              .catch(next)
+              .catch(next);
           })
       }
     })

@@ -5,4 +5,4 @@ const corsMiddleware = cors({
 	allowedHeaders: ['Content-Type', 'Authorization']
 })
 
-module.exports.corsMiddleware;
+module.exports = corsMiddleware;

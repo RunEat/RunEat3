@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const cors = require('cors'); // Avoids CORS errors and allows the API to be called
+const cors = require('./config/cors.config'); // Avoids CORS errors and allows the API to be called
 const createError = require('http-errors');
 const logger = require('morgan');
 const express = require('express');
@@ -18,7 +18,7 @@ const app = express();
 //app.use(passport.initialize())
 app.use(express.json());
 app.use(logger('dev'));
-app.use(cors()); // Like this anyone can make requests to our API from a frontEnd web
+app.use(cors); // Like this anyone can make requests to our API from a frontEnd web
 
 /* Routes */
 const routes = require('./config/routes.config');

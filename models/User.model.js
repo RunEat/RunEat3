@@ -57,7 +57,7 @@ const userSchema = mongoose.Schema(
     },
     activity: {
       type: [String],
-      required: true,
+      required: "Activity level is required",
       enum: ["Sedentary", "Moderate", "Active", "Very active"]
     },
     avatar: {

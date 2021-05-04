@@ -1,6 +1,9 @@
 {
   "name": "RunEatAPI",
   "version": "1.0.0",
+  "engines": {
+    "node": "^12.18.4"
+  },
   "description": "",
   "main": "app.js",
   "bin": {

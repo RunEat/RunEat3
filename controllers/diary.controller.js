@@ -37,9 +37,8 @@ module.exports.getDiary = (req, res, next) => {
             if (diary) {
                 //console.log("diary.meal", diary.meal);
                 res.status(200).json(diary);   
-            } else {
-                res.status(404).json({});
             }
+            next(createError(201, { errors: { diary: "No diary" } }))
       })
       .catch(next);
 }

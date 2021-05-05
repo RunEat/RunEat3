@@ -23,27 +23,13 @@ module.exports.addSport = (req, res, next) => {
   console.log('start', start)
   console.log('end', end)
 
-  Diary.findOne({
-      $and: [{
-          date: {
-            $gte: start
-          }
-        },
-        {
-          date: {
-            $lte: end
-          }
-        }
-      ]
-    })
+  Diary.findOne({date: { $gte: start, $lte: end }, user: req.currentUser})
     .then((diary) => {
       //console.log('diary', diary)
       //console.log('sport', sport)
       if (diary) {
         console.log('diary', diary)
-        Sport.findOne({
-            $and: [{date: {$gte: start}}, {date: {$lte: end}}]
-          })
+        Sport.findOne({date: { $gte: start, $lte: end }, user: req.currentUser})
           .then((sport) => {
             console.log('sport before', sport)
             

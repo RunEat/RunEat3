@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const cors = require('./config/cors.config'); // Avoids CORS errors and allows the API to be called
+//const cors = require('cors')
 const createError = require('http-errors');
 const logger = require('morgan');
 const express = require('express');

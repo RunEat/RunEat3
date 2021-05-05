@@ -11,12 +11,12 @@ module.exports.login = (req, res, next) => {
 	User.findOne({ username: username, active: true })
 		.then(user => {
 			if (!user) {
-			next(createError(404, { errors: { username: 'username or password are not valid'} }))
+			next(createError(404, { errors: { username: 'Username or password are not valid.'} }))
 			} else {
 			return user.checkPassword(password)
 				.then(match => {
 				if (!match) {
-					next(createError(404, { errors: { username: 'username or password are not valid'} }))
+					next(createError(404, { errors: { username: 'Username or password are not valid.'} }))
 				} else {
 					res.json({
 					access_token: jwt.sign(

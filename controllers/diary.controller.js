@@ -19,7 +19,7 @@ module.exports.getDiary = (req, res, next) => {
     console.log('end', end)
      
     Diary.findOne({
-      $and: [{ date: { $gte: start } }, { date: { $lte: end } }],
+      date: { $gte: start, $lte: end }, user: req.currentUser
     })
         .populate("user sport meal")
         //.populate("meal")

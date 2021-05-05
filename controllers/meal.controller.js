@@ -16,44 +16,39 @@ module.exports.getMeal = (req, res, next) => {
   end.setHours(23, 59, 59, 599);
 
   Diary.findOne({
-    $and: [
-      {
-        date: {
-          $gte: start,
-        },
-      },
-      {
-        date: {
-          $lte: end,
-        },
-      },
-    ],
+    date: { $gte: start, $lte: end },
+    user: req.currentUser,
   })
     .populate("meal")
     .then((diary) => {
       if (diary) {
         console.log("diary", diary);
-        return Meal.findOne(diary.meal)
-          .populate("mealType")
-          // .populate('breakfast lunch dinner snacks')
-          .populate({
-            path: "mealType",
-            populate: {
-              path: "breakfast lunch dinner snacks",
-              model: "Recipe",
-            },
-          })
-          .then((meal) => {
-            console.log("recipe", meal.mealtype);
-            res.status(200).json(meal);
-          }); 
-      } else { 
-          // next(
-          //   createError(404, {
-          //     errors: { diary: "Diary is not created" },
-          //   })
-          //)
-        res.status(404).json({})
+        return (
+          Meal.findOne(diary.meal)
+            .populate("mealType")
+            // .populate('breakfast lunch dinner snacks')
+            .populate({
+              path: "mealType",
+              populate: {
+                path: "breakfast lunch dinner snacks",
+                model: "Recipe",
+              },
+            })
+            .then((meal) => {
+              //if (meal.user === req.currentUser) {
+              console.log("req.currentUser", req.currentUser);
+              console.log("recipe", meal.mealtype);
+              res.status(200).json(meal);
+              //}
+            })
+        );
+      } else {
+        // next(
+        //   createError(404, {
+        //     errors: { diary: "Diary is not created" },
+        //   })
+        //)
+        res.status(404).json({});
       }
     })
     .catch(next);
@@ -75,7 +70,8 @@ module.exports.addMeal = (req, res, next) => {
       console.log("end", end);
 
       Diary.findOne({
-        $and: [{ date: { $gte: start } }, { date: { $lte: end } }],
+        date: { $gte: start, $lte: end },
+        user: req.currentUser,
       }).then((diary) => {
         if (diary) {
           let day = recipe.date;
@@ -95,16 +91,22 @@ module.exports.addMeal = (req, res, next) => {
               console.log("diary.meal", diary.meal);
 
               Meal.findOne({
-                $and: [{ date: { $gte: start } }, { date: { $lte: end } }],
+                date: { $gte: start, $lte: end },
+                user: req.currentUser,
               }).then((meal) => {
                 console.log("meal before breakfast", meal);
                 meal.mealType.breakfast = recipe._id;
-                return meal.save().then((meal) => res.status(201).json(meal));
+                return meal.save().then((meal) => {
+                  console.log("mealDB", meal);
+                  console.log("userDB", req.currentUser);
+                  res.status(201).json(meal);
+                });
               });
               break;
             case "lunch":
               Meal.findOne({
-                $and: [{ date: { $gte: start } }, { date: { $lte: end } }],
+                date: { $gte: start, $lte: end },
+                user: req.currentUser,
               }).then((meal) => {
                 console.log("meal before lunch", meal);
                 meal.mealType.lunch = recipe._id;
@@ -113,7 +115,8 @@ module.exports.addMeal = (req, res, next) => {
               break;
             case "dinner":
               Meal.findOne({
-                $and: [{ date: { $gte: start } }, { date: { $lte: end } }],
+                date: { $gte: start, $lte: end },
+                user: req.currentUser,
               }).then((meal) => {
                 console.log("meal before dinner", meal);
                 meal.mealType.dinner = recipe._id;
@@ -122,7 +125,8 @@ module.exports.addMeal = (req, res, next) => {
               break;
             case "snacks":
               Meal.findOne({
-                $and: [{ date: { $gte: start } }, { date: { $lte: end } }],
+                date: { $gte: start, $lte: end },
+                user: req.currentUser,
               }).then((meal) => {
                 console.log("meal before snacks", meal);
                 meal.mealType.snacks = recipe._id;
@@ -147,7 +151,7 @@ module.exports.addMeal = (req, res, next) => {
                   snacks: null,
                 },
                 date: recipe.date,
-                user: req.currentUser
+                user: req.currentUser,
               }).then((meal) => {
                 console.log("meal", meal);
                 Sport.create({
@@ -158,7 +162,7 @@ module.exports.addMeal = (req, res, next) => {
                   caloriesBurned: 0,
                   distance: 0,
                   date: recipe.date,
-                  user: req.currentUser
+                  user: req.currentUser,
                 }).then((sport) => {
                   Diary.create({
                     sport: sport.id,
@@ -292,20 +296,7 @@ module.exports.editMeal = (req, res, next) => {
 
   let mealType = req.query.mealType;
 
-  Meal.findOne({
-    $and: [
-      {
-        date: {
-          $gte: start,
-        },
-      },
-      {
-        date: {
-          $lte: end,
-        },
-      },
-    ],
-  })
+  Meal.findOne({date: { $gte: start, $lte: end }, user: req.currentUser})
     .then((meal) => {
       console.log('meal', meal)
       meal.mealType[mealType] = null;

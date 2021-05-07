@@ -12,6 +12,7 @@ module.exports.addSport = (req, res, next) => {
   //     console.log('req.body', req.body.chronometer.startTime)
   let response = req.body
   let day = response.date
+  console.log("response", response);
 
   let start = new Date(day);
   start.setHours(0, 0, 0, 0)
@@ -33,7 +34,7 @@ module.exports.addSport = (req, res, next) => {
           .then((sport) => {
             console.log('sport before', sport)
             
-            Object.entries(req.body).forEach(([key, value]) => { // For each body element it creates a key value pair
+            Object.entries(response).forEach(([key, value]) => { // For each body element it creates a key value pair
               sport[key] = value;
             });
 
@@ -83,26 +84,30 @@ module.exports.deleteSport = (req, res, next) => {
   console.log('req.params.id', req.params.id)
 
 
-  Diary.findById(req.params.id)
+  Diary.findOne({ date: { $gte: start, $lte: end }, user: req.currentUser })
     .then((diary) => {
-      console.log('diarySport', diary)
+      console.log("diarySport", diary);
       Sport.findByIdAndDelete(diary.sport) // If more than one sport --> deleteMany
         .then((sport) => {
           //console.log('sport', sport)
-          console.log('Sport deleted', sport)
-          res.status(204).json({})
+          console.log("Sport deleted", sport);
+          res.status(204).json({});
         })
-        .catch(next)
+        .catch(next);
 
-      Diary.findByIdAndUpdate(diary._id, {
-          sport: null
-        }, {
-          new: true
-        })
+      Diary.findByIdAndUpdate(
+        diary._id,
+        {
+          sport: null,
+        },
+        {
+          new: true,
+        }
+      )
         .then((diary) => {
-          console.log('diary updated', diary)
+          console.log("diary updated", diary);
         })
-        .catch(next)
+        .catch(next);
     })
-    .catch(next)
+    .catch(next);
 }

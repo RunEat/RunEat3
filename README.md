@@ -35,19 +35,22 @@ The available endpoints are the following:
 | POST   | /new                | { message: "New beer successfully saved to database!"} | Create a new beer (the fields are specified in the instructions)                                                                        |
 | GET    | /search?q=`{query}` | [beers]                                                | Get beers from the DB whose name contains the search term. For example `/search?q=lager` searches for all beers with lager in the name. |
 
-The **RunEat** project can include the following features:
+The project can include the following features:
 
-- A **Signup/Login** page with three different options:
-  - _All Beers_
-  - _Random Beer_
-  - _New Beer_
-- A **Meal** page where you can display the main food diary and which has two main subsections:
-  - _All Beers_
-  - _Random Beer_
-  - _New Beer_
-- A **Single Beer** page to display the details of the beer the user clicked on
-- A **Random Beer** page to display a Random Beer
-- A **New Beer** page to show a form where a user can create new beers
+- A **Signup/Login** page with different options:
+  - __Login__
+  - __Signup__
+  - _Go to email validation_
+  - _Email validated_
+  - __Finish profile__
+- A **Meal** page where you can display the main food diary, which has two main subsections:
+  - _Total Calories and Macros Summary_
+  - _Recipes List_
+- A **Single Recipe** page to display the details of a recipe the user clicked on. The user can add a recipe to its menu from this page.
+- A **Sport** page to display the live running/walking tracker which has two options:
+  - _Activity summary whenever an activity has been logged for the specific date_
+  - _Activity tracker where the user can start an activity whenever there is no activity logged_
+- A **Profile** page to show a form where the user can edit his parameters and personal information.
 
 ## Setup
 - Fork this repo

@@ -36,6 +36,14 @@ The available endpoints for user are the following:
 | PUT    | /user/edit          | { user }                                              | Edit user. Response includes the fields of req.body |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
 | DELETE    | /user/delete        | { }                                              | Delete user | ![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png)|
 
+The available endpoints for meals are the following:
+
+| Method | Endpoint            | Response (200)                                         | Action                                                                                                                                  | Auth Bearer (JWT)|
+| ------ | --------------------------------| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| GET    | /diary/meal?date=`{query}`        | { meal }                                                | Get a meal. You need a date with ISOString format.                                                                                                          |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+| POST    | /diary/meal       | { meal }                                               | Create a new meal (the fields come from the external API Edamam )                                                                                                           |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+| PUT    | /diary/meal/edit?date=`{query}`&mealType=`{query}`  | { meal }                 | Edit a meal. You need a date with ISOString formmat and mealtype.                                                                                                           | ![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png)|
+| DELETE   | /diary/meal/`{diaryID}`                | { diary }                                        | Delete a meal                                                                          |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
 
 The project can include the following features:
 

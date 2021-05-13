@@ -25,15 +25,17 @@
 If you want to develop a React app using the RunEat API, which is deployed on _heroku_, the root for the API is:
 **`https://runeat-api.herokuapp.com/api`**.
 
-The available endpoints are the following:
+The available endpoints for user are the following:
 
-| Method | Endpoint            | Response (200)                                         | Action                                                                                                                                  |
-| ------ | ------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | /                   | [beers]                                                | Get all the beers from the DB                                                                                                           |
-| GET    | /:id                | { beer }                                               | Get the a single/specific beer                                                                                                          |
-| GET    | /random             | { beer }                                               | Get a random beer from the DB                                                                                                           |
-| POST   | /new                | { message: "New beer successfully saved to database!"} | Create a new beer (the fields are specified in the instructions)                                                                        |
-| GET    | /search?q=`{query}` | [beers]                                                | Get beers from the DB whose name contains the search term. For example `/search?q=lager` searches for all beers with lager in the name. |
+| Method | Endpoint            | Response (200)                                         | Action                                                                                                                                  | Auth Bearer (JWT)|
+| ------ | ------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| POST    | /user/login        | { user }                                                | Get a user (the fields are username and password)                                                                                                           |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+| POST    | /user/signup       | { user }                                               | Create a new user (the fields are username, password, age, weight, height and email)                                                                                                           |![image](https://user-images.githubusercontent.com/70661191/118108909-d86cfe80-b3e0-11eb-8ef1-f76295aa55ea.png) |
+| GET    | /user/activate/{{token}}  | { user }                                               | Confirm account send a email to you                                                                                                           | ![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png)|
+| GET   | /user/profile                | { user }                                        | Get a user                                                                          |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+| PUT    | /user/edit          | { user }                                              | Edit user. Response includes the fields of req.body |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+| DELETE    | /user/delete        | { }                                              | Delete user | ![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png)|
+
 
 The project can include the following features:
 

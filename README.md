@@ -45,6 +45,20 @@ The available endpoints for meals are the following:
 | PUT    | /diary/meal/edit?date=`{query}`&mealType=`{query}`  | { meal }                 | Edit a meal. You need a date with ISOString formmat and mealtype.                                                                                                           | ![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png)|
 | DELETE   | /diary/meal/`{diaryID}`                | { diary }                                        | Delete a meal                                                                          |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
 
+The available endpoints for diaries are the following:
+
+| Method | Endpoint            | Response (200)                                         | Action                                                                                                                                  | Auth Bearer (JWT)|
+| ------ | --------------------------------| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| GET    | /diary/meal/`{diaryID}`        | { diary }                                                | Get a diary                                                                                                         |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+| DELETE    | /diary/`{diaryID}`            | { }                                               | Delete a diary.                                                                                                           |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+
+The available endpoints for sports are the following:
+
+| Method | Endpoint            | Response (200)                                         | Action                                                                                                                                  | Auth Bearer (JWT)|
+| ------ | --------------------------------| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| POST    | /diary/sport        | { sport }                                                | Edit a sport.                                                                                                         |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+| DELETE    | /diary/sport/`{diaryID}`          | { diary }                                               | Delete a sport.                                                                                                           |![image](https://user-images.githubusercontent.com/70661191/118108893-d440e100-b3e0-11eb-8e9e-857e9883e2c8.png) |
+
 The project can include the following features:
 
 - A **Signup/Login** page with different options:

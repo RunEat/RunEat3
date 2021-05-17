@@ -22,15 +22,8 @@ router.put('/user/edit', upload.single('avatar'), authMiddleware.isAuthenticated
 router.get('/user/profile', authMiddleware.isAuthenticated, userController.profile);
 router.delete('/user/delete', authMiddleware.isAuthenticated, userController.delete);
 
-//GOOGLE AUTH
-// router.get('/auth/google', passport.authenticate('google', {
-//     session: false,
-//     scope: ["profile", "email"],
-//     accessType: "offline",
-//     approvalPrompt: "force"
-// }));
-// router.get('/auth/google/callback', passport.authenticate('google', { session: false }), userController.loginGoogle)
-// router.get('/verify', authMiddleware.isAuthenticated)  //POSTMAN
+//login google
+router.post("/googlelogin", userController.loginGoogle);
 
 // Password Recovery
 router.post('/user/password_reset', userController.sendPasswordReset); // Post sending user Id

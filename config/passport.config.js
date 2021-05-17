@@ -1,29 +1,46 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20');
-let mongoose = require('mongoose');
-const User = mongoose.model('User');
+const passport = requiere("passport");
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
-require('dotenv').config();
-
-passport.use('google', new GoogleStrategy(
+passport.use(
+  "google-auth",
+  new GoogleStrategy(
     {
-      // options for strategy
-      callbackURL: 'http://localhost:3001/auth/google/callback/',
-      clientID: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET
+      clientID: process.env.G_CLIENT_ID,
+      clientSecret: process.env.G_CLIENT_SECRET,
+      callbackURL: process.env.G_REDIRECT_URI || "/authenticate/google/cb",
     },
-    async (accessToken, refreshToken, profile, done) => {
-      const email = profile.emails[0].value;
+    (accessToken, refreshToken, profile, next) => {
+      const googleID = profile.id;
+      const email = profile.emails[0] ? profile.emails[0].value : undefined;
+      const imgProfile = profile.photos[0].value;
 
-      // check if user already exists
-      const currentUser = await User.findOne({ googleId: profile.id });
-      if (currentUser) {
-        // already have the user -> return (login)
-        return done(null, currentUser);
+      if (googleID && email) {
+        User.findOne({
+          $or: [{ email: email }, { "social.google": googleID }],
+        })
+          .then((user) => {
+            /* next(null, false, { error: "Registrate y activa tu cuenta aceptando el correo de confirmacion" }) */
+            if (!user) {
+              const newUserInstance = new User({
+                email,
+                avatar,
+                password: "Aa1" + mongoose.Types.ObjectId(),
+                social: {
+                  google: googleID,
+                },
+                active: true,
+              });
+
+              return newUserInstance
+                .save()
+                .then((newUser) => next(null, newUser));
+            } else {
+              next(null, user);
+            }
+          })
+          .catch(next);
       } else {
-        // register user and return
-        const newUser = await new User({ email: email, googleId: profile.id }).save();
-        return done(null, newUser);
+        next(null, null, { error: "Error connecting to Google Auth" });
       }
     }
   )

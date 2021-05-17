@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema(
       required: "Email is required",
       match: [EMAIL_PATTERN, "Email is not valid"],
     },
-    // googleID: {
+    // social: {
     //   type: String,
     //   default: null
     // },

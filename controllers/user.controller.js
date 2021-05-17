@@ -5,6 +5,7 @@ const { sendActivationEmail } = require("../config/mailer.config");
 const { sendPasswordRecoveryEmail } = require("../config/mailer.config");
 const { v4: uuidv4 } = require("uuid");
 const { OAuth2Client } = require("google-auth-library");
+const { PreconditionRequired } = require("http-errors");
 
 const client = new OAuth2Client(
   "133783976566-p3ilg93e7mlemi931s14n0aboa0ar9uk.apps.googleusercontent.com"
@@ -56,7 +57,7 @@ module.exports.loginGoogle = (req, res, next) => {
     })
     .then((response) => {
       //console.log("response", response);
-      const { email_verified, name, email } = response.payload;
+      const { email_verified, name, email, picture } = response.payload;
       if (email_verified) {
         User.findOne({ email }).exec((err, user) => {
           if (err) {

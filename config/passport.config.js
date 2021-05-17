@@ -23,7 +23,7 @@ passport.use(
             if (!user) {
               const newUserInstance = new User({
                 email,
-                imgProfile,
+                avatar,
                 password: "Aa1" + mongoose.Types.ObjectId(),
                 social: {
                   google: googleID,
@@ -40,7 +40,7 @@ passport.use(
           })
           .catch(next);
       } else {
-        next(null, null, { error: "Error conectando con Google OAuth" });
+        next(null, null, { error: "Error connecting to Google Auth" });
       }
     }
   )

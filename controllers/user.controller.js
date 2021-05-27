@@ -204,7 +204,7 @@ module.exports.delete = (req, res, next) => {
     .then(() => {
       res.status(204).json({});
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports.sendPasswordReset = (req, res, next) => {
